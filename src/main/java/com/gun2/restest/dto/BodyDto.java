@@ -6,11 +6,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class ParamEntityDto implements Serializable {
+public class BodyDto implements Serializable {
     private final Long id;
-    private final String key;
-    private final String value;
-    private final String description;
+    private final String body;
     private final LocalDateTime createdAt;
     private final LocalDateTime updateAt;
 }

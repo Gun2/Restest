@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class HeaderEntityDto implements Serializable {
+public class HeaderDto implements Serializable {
     private final Long id;
     private final String key;
     private final String value;
