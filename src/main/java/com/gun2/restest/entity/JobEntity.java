@@ -1,5 +1,6 @@
 package com.gun2.restest.entity;
 
+import com.gun2.restest.constant.Method;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.URL;
@@ -33,6 +34,9 @@ public class JobEntity {
     @OneToMany
     private List<HeaderEntity> headerEntityList = new ArrayList<>();
 
+    @OneToMany
+    private List<BodyEntity> bodyEntities = new ArrayList<>();
+
 
 
     @Column(updatable = false)
@@ -41,13 +45,6 @@ public class JobEntity {
 
     @CreationTimestamp
     private LocalDateTime updateAt;
-
-    enum Method{
-        GET,
-        POST,
-        UPDATE,
-        DELETE
-    }
 
     @Builder
     public JobEntity(Long id, String title, Method method, String url, LocalDateTime createdAt, LocalDateTime updateAt) {
