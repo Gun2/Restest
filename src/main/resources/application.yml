@@ -1,0 +1,22 @@
+server:
+  port: 8081
+jpa:
+  hibernate:
+    ddl-auto: update
+  show-sql: true
+
+h2:
+  console:
+    enabled: true
+    path: /h2_db
+datasource:
+  url: jdbc:log4jdbc:h2:tcp://localhost/~/test
+  driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  username: sa
+  password:
+
+#swagger2
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
