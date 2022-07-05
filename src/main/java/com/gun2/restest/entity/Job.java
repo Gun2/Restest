@@ -3,6 +3,7 @@ package com.gun2.restest.entity;
 import com.gun2.restest.constant.Method;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
@@ -44,7 +45,7 @@ public class Job {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     private LocalDateTime updateAt;
 
     @Builder
