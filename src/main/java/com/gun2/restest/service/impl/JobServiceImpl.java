@@ -9,6 +9,7 @@ import com.gun2.restest.service.JobService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,11 +24,13 @@ public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
 
     @Override
+    @Transactional
     public List<JobDto> findAll() {
         return jobRepository.findAll().stream().map(JobDto::new).toList();
     }
 
     @Override
+    @Transactional
     public JobDto findById(Long id) {
         if(ObjectUtils.isEmpty(id)){
             throw new IdentityIsNullException("요청으로부터 id값을 받지 못했습니다.");

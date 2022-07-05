@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -19,6 +20,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JobRestController {
     private final JobService jobService;
+
+    @GetMapping(path = "/v1/job")
+    public ResponseEntity findAll(){
+        List<JobDto> items = jobService.findAll();
+        return new SuccessResponse(items).toResponseEntity(SuccessCode.OK);
+    }
 
     @GetMapping(path = "/v1/job/{id}")
     public ResponseEntity findById(@PathVariable Long id){
@@ -31,4 +38,17 @@ public class JobRestController {
         JobDto result = jobService.insert(jobDto);
         return new SuccessResponse(result).toResponseEntity(SuccessCode.CREATED);
     }
+
+    @PutMapping(path = "/v1/job")
+    public ResponseEntity update(@RequestBody @Validated JobDto jobDto){
+        JobDto result = jobService.update(jobDto);
+        return new SuccessResponse(result).toResponseEntity(SuccessCode.OK);
+    }
+
+    @DeleteMapping(path = "/v1/job/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
+        jobService.delete(id);
+        return new SuccessResponse(null).toResponseEntity(SuccessCode.OK);
+    }
+
 }
