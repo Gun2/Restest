@@ -15,10 +15,10 @@ import java.util.List;
 @ToString
 @Table
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class JobEntity {
+public class Job {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
@@ -29,13 +29,16 @@ public class JobEntity {
     private String url;
 
     @OneToMany
-    private List<ParamEntity> paramEntityList = new ArrayList<>();
+    @JoinColumn(name = "id")
+    private List<JobParam> jobParamList = new ArrayList<>();
 
     @OneToMany
-    private List<HeaderEntity> headerEntityList = new ArrayList<>();
+    @JoinColumn(name = "id")
+    private List<JobHeader> jobHeaderList = new ArrayList<>();
 
     @OneToMany
-    private List<BodyEntity> bodyEntities = new ArrayList<>();
+    @JoinColumn(name = "id")
+    private List<JobBody> jobBodyEntities = new ArrayList<>();
 
 
 
@@ -47,7 +50,7 @@ public class JobEntity {
     private LocalDateTime updateAt;
 
     @Builder
-    public JobEntity(Long id, String title, Method method, String url, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public Job(Long id, String title, Method method, String url, LocalDateTime createdAt, LocalDateTime updateAt) {
         this.id = id;
         this.title = title;
         this.method = method;

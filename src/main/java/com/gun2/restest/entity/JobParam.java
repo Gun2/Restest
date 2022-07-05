@@ -11,13 +11,13 @@ import java.time.LocalDateTime;
 @ToString
 @Table
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HeaderEntity {
+public class JobParam {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String key;
+    private String keyName;
     private String value;
     private String description;
 
@@ -29,9 +29,9 @@ public class HeaderEntity {
     private LocalDateTime updateAt;
 
     @Builder
-    public HeaderEntity(Long id, String key, String value, String description, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public JobParam(Long id, String keyName, String value, String description, LocalDateTime createdAt, LocalDateTime updateAt) {
         this.id = id;
-        this.key = key;
+        this.keyName = keyName;
         this.value = value;
         this.description = description;
         this.createdAt = createdAt;

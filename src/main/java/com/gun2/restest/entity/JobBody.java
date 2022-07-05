@@ -11,15 +11,13 @@ import java.time.LocalDateTime;
 @ToString
 @Table
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ParamEntity {
+public class JobBody {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String key;
-    private String value;
-    private String description;
+    private String body;
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -29,11 +27,9 @@ public class ParamEntity {
     private LocalDateTime updateAt;
 
     @Builder
-    public ParamEntity(Long id, String key, String value, String description, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public JobBody(Long id, String body, LocalDateTime createdAt, LocalDateTime updateAt) {
         this.id = id;
-        this.key = key;
-        this.value = value;
-        this.description = description;
+        this.body = body;
         this.createdAt = createdAt;
         this.updateAt = updateAt;
     }
