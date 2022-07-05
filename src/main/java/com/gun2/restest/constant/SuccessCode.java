@@ -1,7 +1,8 @@
 package com.gun2.restest.constant;
 
 public enum SuccessCode implements ResponseCode{
-    OK(200, "OK", "Success");
+    OK(200, "OK", "Success"),
+    CREATED(201, "CREATED", "Created");
 
     private int status;
     private String code;
