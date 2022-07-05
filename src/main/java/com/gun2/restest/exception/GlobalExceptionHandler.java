@@ -3,6 +3,7 @@ package com.gun2.restest.exception;
 import com.gun2.restest.constant.ErrorCode;
 import com.gun2.restest.form.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -102,6 +103,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
         log.error("handleHttpMessageNotReadableException", e);
+        return new ErrorResponse().toResponseEntity(ErrorCode.INVALID_INPUT_VALUE);
+    }
+
+    /**
+     * 요청한 값을 읽을 수 없는 경우 발생 ex => JSON format이 옳바르지 않은경우
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    protected ResponseEntity<ErrorResponse> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException e){
+        log.error("handleInvalidDataAccessApiUsageException", e);
         return new ErrorResponse().toResponseEntity(ErrorCode.INVALID_INPUT_VALUE);
     }
 
