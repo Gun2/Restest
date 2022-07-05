@@ -7,7 +7,7 @@ import java.util.List;
 public interface JobService {
     List<JobDto> findAll();
 
-    JobDto findById(long id);
+    JobDto findById(Long id);
 
     JobDto insert(JobDto jobDto);
 
