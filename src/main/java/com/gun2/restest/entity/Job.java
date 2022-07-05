@@ -38,9 +38,7 @@ public class Job {
 
     @OneToMany
     @JoinColumn(name = "id")
-    private List<JobBody> jobBodyEntities = new ArrayList<>();
-
-
+    private List<JobBody> jobBodyList = new ArrayList<>();
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -50,12 +48,13 @@ public class Job {
     private LocalDateTime updateAt;
 
     @Builder
-    public Job(Long id, String title, Method method, String url, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public Job(Long id, String title, Method method, String url, List<JobParam> jobParamList, List<JobHeader> jobHeaderList, List<JobBody> jobBodyList) {
         this.id = id;
         this.title = title;
         this.method = method;
         this.url = url;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
+        this.jobParamList = jobParamList;
+        this.jobHeaderList = jobHeaderList;
+        this.jobBodyList = jobBodyList;
     }
 }
