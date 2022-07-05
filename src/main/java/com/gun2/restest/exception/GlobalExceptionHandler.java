@@ -41,6 +41,13 @@ public class GlobalExceptionHandler {
         return new ErrorResponse().toResponseEntity(ErrorCode.HANDLE_ACCESS_DENIED);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    protected ResponseEntity<ErrorResponse> handleRowNotFoundByIdException(RowNotFoundByIdException e){
+        log.error("handleRowNotFoundByIdException", e);
+        log.error("handleRowNotFoundByIdException id : {}", e.getId());
+        return new ErrorResponse().toResponseEntity(ErrorCode.NOT_FOUNT_BY_ID);
+    }
+
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e){
         return new ErrorResponse().toResponseEntity(ErrorCode.INTERNAL_SERVER_ERROR);
