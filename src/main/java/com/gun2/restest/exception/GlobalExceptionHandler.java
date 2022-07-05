@@ -4,7 +4,9 @@ import com.gun2.restest.constant.ErrorCode;
 import com.gun2.restest.form.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,6 +38,11 @@ public class GlobalExceptionHandler {
         return new ErrorResponse().toResponseEntity(ErrorCode.METHOD_NOT_ALLOWED);
     }
 
+    /**
+     * 접근 권한이 없는 경우 발생
+     * @param e
+     * @return
+     */
     @ExceptionHandler(AccessDeniedException.class)
     protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
         log.error("handleAccessDeniedException", e);
@@ -74,6 +81,28 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
         log.error("handleMethodArgumentTypeMismatchException", e);
         return new ErrorResponse().toResponseEntity(ErrorCode.INVALID_TYPE_VALUE);
+    }
+
+    /**
+     * 지원하지 않는 Content type 으로 요청한 경우 발생
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    protected ResponseEntity<ErrorResponse> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e){
+        log.error("handleHttpMediaTypeNotSupportedException", e);
+        return new ErrorResponse().toResponseEntity(ErrorCode.CONTENT_TYPE_NOT_SUPPORTED);
+    }
+
+    /**
+     * 요청한 값을 읽을 수 없는 경우 발생 ex => JSON format이 옳바르지 않은경우
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
+        log.error("handleHttpMessageNotReadableException", e);
+        return new ErrorResponse().toResponseEntity(ErrorCode.INVALID_INPUT_VALUE);
     }
 
     @ExceptionHandler(Exception.class)
