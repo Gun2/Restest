@@ -8,12 +8,13 @@ import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.nio.file.AccessDeniedException;
 
 
-@RestController
+@RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
@@ -41,11 +42,38 @@ public class GlobalExceptionHandler {
         return new ErrorResponse().toResponseEntity(ErrorCode.HANDLE_ACCESS_DENIED);
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    /**
+     * 없는 row를 질의하여 사용하려고 한 경우.
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(RowNotFoundByIdException.class)
     protected ResponseEntity<ErrorResponse> handleRowNotFoundByIdException(RowNotFoundByIdException e){
         log.error("handleRowNotFoundByIdException", e);
         log.error("handleRowNotFoundByIdException id : {}", e.getId());
-        return new ErrorResponse().toResponseEntity(ErrorCode.NOT_FOUNT_BY_ID);
+        return new ErrorResponse().toResponseEntity(ErrorCode.NOT_FOUND_BY_ID);
+    }
+
+    /**
+     * id가 null인 값으로 겁색을 요청한 경우.
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(IdentityIsNullException.class)
+    protected ResponseEntity<ErrorResponse> handleIdentityIsNullException(IdentityIsNullException e){
+        log.error("handleIdentityIsNullException", e);
+        return new ErrorResponse().toResponseEntity(ErrorCode.ID_IS_NULL);
+    }
+
+    /**
+     * 잘못된 타입으로 요청한 경우
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
+        log.error("handleMethodArgumentTypeMismatchException", e);
+        return new ErrorResponse().toResponseEntity(ErrorCode.INVALID_TYPE_VALUE);
     }
 
     @ExceptionHandler(Exception.class)
