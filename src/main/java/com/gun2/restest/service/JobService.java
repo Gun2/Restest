@@ -6,4 +6,12 @@ import java.util.List;
 
 public interface JobService {
     List<JobDto> findAll();
+
+    JobDto findById(long id);
+
+    JobDto insert(JobDto jobDto);
+
+    JobDto update(JobDto jobDto);
+
+    void delete(long id);
 }
