@@ -6,6 +6,6 @@ package com.gun2.restest.constant;
 public enum Method {
     GET,
     POST,
-    UPDATE,
+    PUT,
     DELETE
 }
