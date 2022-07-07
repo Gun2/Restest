@@ -21,31 +21,31 @@ import java.util.Optional;
 public class JobRestController {
     private final JobService jobService;
 
-    @GetMapping(path = "/v1/job")
+    @GetMapping(path = "/v1/jobs")
     public ResponseEntity findAll(){
         List<JobDto> items = jobService.findAll();
         return new SuccessResponse(items).toResponseEntity(SuccessCode.OK);
     }
 
-    @GetMapping(path = "/v1/job/{id}")
+    @GetMapping(path = "/v1/jobs/{id}")
     public ResponseEntity findById(@PathVariable Long id){
         JobDto jobDto = jobService.findById(id);
         return new SuccessResponse(jobDto).toResponseEntity(SuccessCode.OK);
     }
 
-    @PostMapping(path = "/v1/job")
+    @PostMapping(path = "/v1/jobs")
     public ResponseEntity create(@RequestBody @Validated JobDto jobDto){
         JobDto result = jobService.insert(jobDto);
         return new SuccessResponse(result).toResponseEntity(SuccessCode.CREATED);
     }
 
-    @PutMapping(path = "/v1/job")
+    @PutMapping(path = "/v1/jobs")
     public ResponseEntity update(@RequestBody @Validated JobDto jobDto){
         JobDto result = jobService.update(jobDto);
         return new SuccessResponse(result).toResponseEntity(SuccessCode.OK);
     }
 
-    @DeleteMapping(path = "/v1/job/{id}")
+    @DeleteMapping(path = "/v1/jobs/{id}")
     public ResponseEntity delete(@PathVariable Long id){
         jobService.delete(id);
         return new SuccessResponse(null).toResponseEntity(SuccessCode.OK);
