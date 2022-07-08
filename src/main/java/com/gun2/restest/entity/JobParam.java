@@ -18,6 +18,8 @@ public class JobParam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long jobId;
+
     private String keyName;
     private String value;
     private String description;
@@ -30,8 +32,9 @@ public class JobParam {
     private LocalDateTime updateAt;
 
     @Builder
-    public JobParam(Long id, String keyName, String value, String description, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public JobParam(Long id, Long jobId, String keyName, String value, String description, LocalDateTime createdAt, LocalDateTime updateAt) {
         this.id = id;
+        this.jobId = jobId;
         this.keyName = keyName;
         this.value = value;
         this.description = description;

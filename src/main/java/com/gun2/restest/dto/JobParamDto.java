@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class JobParamDto implements Serializable {
     private Long id;
+    private Long jobId;
     private String keyName;
     private String value;
     private String description;
@@ -20,6 +21,7 @@ public class JobParamDto implements Serializable {
 
     public JobParamDto(JobParam jobParam){
         this.id = jobParam.getId();
+        this.jobId = jobParam.getJobId();
         this.keyName = jobParam.getKeyName();
         this.value = jobParam.getValue();
         this.description = jobParam.getDescription();
@@ -30,6 +32,7 @@ public class JobParamDto implements Serializable {
     public JobParam toEntity(){
         return JobParam.builder()
                 .id(this.id)
+                .jobId(this.jobId)
                 .keyName(this.keyName)
                 .value(this.value)
                 .description(this.description)

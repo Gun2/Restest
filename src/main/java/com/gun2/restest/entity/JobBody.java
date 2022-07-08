@@ -17,8 +17,9 @@ public class JobBody {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private Long jobId;
     private String body;
+    private Integer afterDelay;
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -28,8 +29,9 @@ public class JobBody {
     private LocalDateTime updateAt;
 
     @Builder
-    public JobBody(Long id, String body, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public JobBody(Long id, Long jobId, String body, Integer afterDelay, LocalDateTime createdAt, LocalDateTime updateAt) {
         this.id = id;
+        this.jobId = jobId;
         this.body = body;
         this.createdAt = createdAt;
         this.updateAt = updateAt;

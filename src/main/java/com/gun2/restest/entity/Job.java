@@ -30,15 +30,15 @@ public class Job {
     private String url;
 
     @OneToMany
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "jobId")
     private List<JobParam> jobParamList = new ArrayList<>();
 
     @OneToMany
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "jobId")
     private List<JobHeader> jobHeaderList = new ArrayList<>();
 
     @OneToMany
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "jobId")
     private List<JobBody> jobBodyList = new ArrayList<>();
 
     @Column(updatable = false)
