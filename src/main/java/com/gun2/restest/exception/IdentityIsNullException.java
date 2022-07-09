@@ -4,6 +4,9 @@
  */
 package com.gun2.restest.exception;
 
+/**
+ * <b>DB table 조회 전 id값이 null인경우 발생</b>
+ */
 public class IdentityIsNullException extends RuntimeException{
     public IdentityIsNullException(String message){
         super(message);
