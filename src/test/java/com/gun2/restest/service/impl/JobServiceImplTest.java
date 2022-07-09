@@ -1,11 +1,11 @@
-package com.gun2.restest.service;
+package com.gun2.restest.service.impl;
 
 
 import com.gun2.restest.constant.Method;
 import com.gun2.restest.dto.JobDto;
-import com.gun2.restest.exception.RowNotFoundByIdException;
+import com.gun2.restest.exception.RowNotFoundFromIdException;
+import com.gun2.restest.service.JobService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,16 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.util.List;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @ComponentScan
 @DataJpaTest
-public class JobServiceTest {
+public class JobServiceImplTest {
 
     @Autowired
     private JobService jobService;
@@ -72,7 +69,7 @@ public class JobServiceTest {
                jobService.findById(insertResult.getId());
            });
            assertThat(throwable).as("row를 찾을 수 없어야함.")
-                   .isInstanceOf(RowNotFoundByIdException.class);
+                   .isInstanceOf(RowNotFoundFromIdException.class);
        }
 
     }

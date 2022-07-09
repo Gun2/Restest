@@ -3,7 +3,7 @@ package com.gun2.restest.service.impl;
 import com.gun2.restest.dto.JobDto;
 import com.gun2.restest.entity.Job;
 import com.gun2.restest.exception.IdentityIsNullException;
-import com.gun2.restest.exception.RowNotFoundByIdException;
+import com.gun2.restest.exception.RowNotFoundFromIdException;
 import com.gun2.restest.repository.JobRepository;
 import com.gun2.restest.service.JobService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +36,7 @@ public class JobServiceImpl implements JobService {
         }
         Optional<Job> optionalJob = jobRepository.findById(id);
         Job job = optionalJob.orElseGet( () -> {
-            throw new RowNotFoundByIdException("entity를 찾지 못했습니다.", id);
+            throw new RowNotFoundFromIdException("entity를 찾지 못했습니다.", id);
         });
         return new JobDto(job);
     }
@@ -52,7 +51,7 @@ public class JobServiceImpl implements JobService {
     public JobDto update(JobDto jobDto) {
         Optional<Job> target = jobRepository.findById(jobDto.getId());
         target.orElseGet(() -> {
-            throw new RowNotFoundByIdException("update할 entity를 찾지 못했습니다.", jobDto.getId());
+            throw new RowNotFoundFromIdException("update할 entity를 찾지 못했습니다.", jobDto.getId());
         });
         return this.insert(jobDto);
     }
