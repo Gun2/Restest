@@ -20,10 +20,10 @@ public abstract class Counting {
     }
 
     public void increaseNumber(){
-        this.number.set(number.get() + 1);
+        this.number.set(number.getAndIncrement());
     }
 
     public void decreaseNumber(){
-        this.number.set(number.get() - 1);
+        this.number.set(number.getAndDecrement());
     }
 }
