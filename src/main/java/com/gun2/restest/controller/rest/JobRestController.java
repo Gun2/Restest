@@ -4,6 +4,7 @@ import com.gun2.restest.constant.SuccessCode;
 import com.gun2.restest.dto.JobDto;
 import com.gun2.restest.form.response.SuccessResponse;
 import com.gun2.restest.service.JobService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class JobRestController {
     private final JobService jobService;
 
+    @ApiOperation(value = "모든 업무관리 조회", notes="업무관리 테이블의 모든 값을 반환")
     @GetMapping(path = "/v1/jobs")
     public ResponseEntity findAll(){
         List<JobDto> items = jobService.findAll();
