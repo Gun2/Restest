@@ -6,6 +6,7 @@ import com.gun2.restest.entity.JobHeader;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 public class JobDto implements Serializable {
     private Long id;
+    @NotBlank
     private String title;
     private Method method;
     @URL
