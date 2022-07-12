@@ -26,6 +26,7 @@ public class ErrorResponse extends BaseResponse{
 
 
 
+    @Getter
     class ClientFieldError{
         String field;
         String defaultMessage;
