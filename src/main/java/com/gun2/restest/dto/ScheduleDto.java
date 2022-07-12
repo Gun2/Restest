@@ -26,6 +26,8 @@ public class ScheduleDto implements Serializable {
     @Range(min = 0, max = 86400)
     private Integer delay;
 
+    private boolean run;
+
     private List<Long> jobIdList = new ArrayList<>();
     private List<JobDto> jobList = new ArrayList<>();
 
@@ -40,12 +42,14 @@ public class ScheduleDto implements Serializable {
         this.jobIdList = schedule.getScheduleJobList().stream().map(s -> s.getJob().getId()).toList();
         this.createdAt = schedule.getCreatedAt();
         this.updateAt = schedule.getUpdateAt();
+        this.run = schedule.isRun();
     }
 
     public Schedule toEntity(){
         return Schedule.builder()
                 .id(this.id)
                 .title(this.title)
+                .run(this.run)
                 .build();
     }
 }

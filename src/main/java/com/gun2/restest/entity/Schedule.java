@@ -23,6 +23,7 @@ public class Schedule {
     private Long id;
     private String title;
     private Integer delay;
+    private boolean run;
 
     @OneToMany(mappedBy = "schedule")
     private List<ScheduleJob> scheduleJobList = new ArrayList<>();
@@ -35,10 +36,11 @@ public class Schedule {
     private LocalDateTime updateAt;
 
     @Builder
-    public Schedule(Long id, String title, Integer delay) {
+    public Schedule(Long id, String title, Integer delay, boolean run) {
         this.id = id;
         this.title = title;
         this.delay = delay;
+        this.run = run;
     }
 
     public void setScheduleJobList(List<ScheduleJob> scheduleJobList){
