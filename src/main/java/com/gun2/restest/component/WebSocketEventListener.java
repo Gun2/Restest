@@ -15,7 +15,7 @@ public class WebSocketEventListener {
     private final AccessUserComponent accessUserComponent;
     private final SysInfoRestController sysInfoRestController;
 
-    @EventListener
+    @EventListener(SessionConnectEvent.class)
     private void handleSessionConnected(SessionConnectEvent event) {
         log.info("connect");
         accessUserComponent.increaseNumber();
@@ -23,9 +23,10 @@ public class WebSocketEventListener {
 
     }
 
-    @EventListener
+    @EventListener(SessionDisconnectEvent.class)
     private void handleSessionDisconnect(SessionDisconnectEvent event) {
         log.info("disconnect");
+        log.info(event.getSessionId());
         accessUserComponent.decreaseNumber();
         sysInfoRestController.userNumber("remove");
     }
