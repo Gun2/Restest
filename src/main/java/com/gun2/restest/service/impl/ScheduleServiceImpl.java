@@ -2,6 +2,7 @@ package com.gun2.restest.service.impl;
 
 import com.gun2.restest.dto.ScheduleDto;
 import com.gun2.restest.dto.ScheduleJobDto;
+import com.gun2.restest.dto.ScheduleRunDto;
 import com.gun2.restest.entity.Schedule;
 import com.gun2.restest.exception.IdentityIsNullException;
 import com.gun2.restest.exception.RowNotFoundFromIdException;
@@ -70,5 +71,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     public void delete(long id) {
         scheduleRepository.deleteById(id);
         scheduleJobService.deleteByScheduleId(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateRun(ScheduleRunDto scheduleRunDto) {
+        scheduleRepository.updateRun(scheduleRunDto);
     }
 }
