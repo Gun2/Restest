@@ -10,20 +10,19 @@ public abstract class Counting {
     private AtomicInteger number = new AtomicInteger();
 
 
-
-    public int getNumber(){
+    public int getNumber() {
         return this.number.get();
     }
 
-    public void setNumber(int num){
+    public void setNumber(int num) {
         this.number.set(num);
     }
 
-    public void increaseNumber(){
-        this.number.set(number.getAndIncrement());
+    public void increaseNumber() {
+        this.number.incrementAndGet();
     }
 
-    public void decreaseNumber(){
-        this.number.set(number.getAndDecrement());
+    public void decreaseNumber() {
+        this.number.getAndDecrement();
     }
 }
