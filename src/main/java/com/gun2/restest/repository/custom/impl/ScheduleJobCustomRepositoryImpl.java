@@ -16,4 +16,9 @@ public class ScheduleJobCustomRepositoryImpl implements ScheduleJobCustomReposit
     public void deleteAllByScheduleId(@NonNull Long scheduleId) {
         queryFactory.delete(scheduleJob).where(scheduleJob.schedule.id.eq(scheduleId)).execute();
     }
+
+    @Override
+    public void deleteAllByJobId(Long jobId) {
+        queryFactory.delete(scheduleJob).where(scheduleJob.job.id.eq(jobId)).execute();
+    }
 }

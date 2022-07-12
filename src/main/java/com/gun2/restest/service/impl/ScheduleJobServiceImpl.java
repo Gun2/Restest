@@ -44,4 +44,6 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
     public void deleteByScheduleId(Long scheduleId) {
         scheduleJobRepository.deleteAllByScheduleId(scheduleId);
     }
+
+
 }
