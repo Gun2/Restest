@@ -19,6 +19,7 @@ public class JobHeaderDto implements Serializable {
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;
+    private boolean usable;
 
     public JobHeaderDto(JobHeader jobHeader){
         this.id = jobHeader.getId();
@@ -28,6 +29,7 @@ public class JobHeaderDto implements Serializable {
         this.description = jobHeader.getDescription();
         this.createdAt = jobHeader.getCreatedAt();
         this.updateAt = jobHeader.getUpdateAt();
+        this.usable = jobHeader.isUsable();
     }
 
     public JobHeader toEntity(){
@@ -37,6 +39,7 @@ public class JobHeaderDto implements Serializable {
                 .keyName(this.keyName)
                 .value(this.value)
                 .description(this.description)
+                .usable(this.usable)
                 .build();
     }
 }

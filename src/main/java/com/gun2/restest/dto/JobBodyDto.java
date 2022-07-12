@@ -22,6 +22,8 @@ public class JobBodyDto implements Serializable {
     @NotNull
     @Range(min = 0, max = 1000000)
     private Integer afterDelay;
+
+    private boolean usable;
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;
 
@@ -32,6 +34,7 @@ public class JobBodyDto implements Serializable {
         this.afterDelay = jobBody.getAfterDelay();
         this.createdAt = jobBody.getCreatedAt();
         this.updateAt = jobBody.getUpdateAt();
+        this.usable = jobBody.isUsable();
     }
 
     public JobBody toEntity(){
@@ -40,6 +43,7 @@ public class JobBodyDto implements Serializable {
                 .jobId(this.jobId)
                 .body(this.body)
                 .afterDelay(this.afterDelay)
+                .usable(this.usable)
                 .build();
     }
 }

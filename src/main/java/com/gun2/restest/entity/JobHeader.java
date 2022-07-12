@@ -30,14 +30,16 @@ public class JobHeader {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
+    //사용유무
+    private boolean usable;
+
     @Builder
-    public JobHeader(Long id, Long jobId, String keyName, String value, String description, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public JobHeader(Long id, Long jobId, String keyName, String value, String description, boolean usable) {
         this.id = id;
         this.jobId = jobId;
         this.keyName = keyName;
         this.value = value;
         this.description = description;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
+        this.usable = usable;
     }
 }

@@ -28,12 +28,15 @@ public class JobBody {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
+    private boolean usable;
+
     @Builder
-    public JobBody(Long id, Long jobId, String body, Integer afterDelay, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public JobBody(Long id, Long jobId, String body, Integer afterDelay, boolean usable) {
         this.id = id;
         this.jobId = jobId;
         this.body = body;
         this.createdAt = createdAt;
         this.updateAt = updateAt;
+        this.usable = usable;
     }
 }

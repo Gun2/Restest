@@ -18,6 +18,7 @@ public class JobParamDto implements Serializable {
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;
+    private boolean usable;
 
     public JobParamDto(JobParam jobParam){
         this.id = jobParam.getId();
@@ -27,6 +28,7 @@ public class JobParamDto implements Serializable {
         this.description = jobParam.getDescription();
         this.createdAt = jobParam.getCreatedAt();
         this.updateAt = jobParam.getUpdateAt();
+        this.usable = jobParam.isUsable();
     }
 
     public JobParam toEntity(){
@@ -36,6 +38,7 @@ public class JobParamDto implements Serializable {
                 .keyName(this.keyName)
                 .value(this.value)
                 .description(this.description)
+                .usable(this.usable)
                 .build();
     }
 }

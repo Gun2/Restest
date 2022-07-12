@@ -31,14 +31,15 @@ public class JobParam {
     @UpdateTimestamp
     private LocalDateTime updateAt;
 
+    private boolean usable;
+
     @Builder
-    public JobParam(Long id, Long jobId, String keyName, String value, String description, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public JobParam(Long id, Long jobId, String keyName, String value, String description, boolean usable) {
         this.id = id;
         this.jobId = jobId;
         this.keyName = keyName;
         this.value = value;
         this.description = description;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
+        this.usable = usable;
     }
 }
