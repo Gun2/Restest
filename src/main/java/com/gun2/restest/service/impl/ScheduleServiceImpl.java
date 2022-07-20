@@ -1,5 +1,6 @@
 package com.gun2.restest.service.impl;
 
+import com.gun2.restest.component.scheduler.SchedulerComponent;
 import com.gun2.restest.dto.ScheduleDto;
 import com.gun2.restest.dto.ScheduleJobDto;
 import com.gun2.restest.dto.ScheduleRunDto;
@@ -23,7 +24,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final ScheduleJobService scheduleJobService;
-
+    private final SchedulerComponent schedulerComponent;
 
     @Override
     @Transactional
@@ -63,19 +64,53 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new RowNotFoundFromIdException("update할 entity를 찾지 못했습니다.", scheduleDto.getId());
         });
         scheduleJobService.deleteByScheduleId(scheduleDto.getId());
-        return this.insert(scheduleDto);
+        ScheduleDto insertResult = this.insert(scheduleDto);
+        componentUpdate(insertResult);
+        return insertResult;
     }
+
+    /**
+     * <b>component 정보 업데이트</b>
+     * @param scheduleDto update된 컴포넌트 정보
+     */
+    public void componentUpdate(ScheduleDto scheduleDto){
+        schedulerComponent.updateSchedule(scheduleDto);
+    }
+
+    /**
+     * <b>compoenet 정보 삭제</b>
+     * @param scheduleId 삭제된 scheduleId
+     */
+    public void componentDelete(Long scheduleId){
+        schedulerComponent.deleteSchedule(scheduleId);
+    }
+
 
     @Override
     @Transactional
     public void delete(long id) {
         scheduleRepository.deleteById(id);
         scheduleJobService.deleteByScheduleId(id);
+        componentDelete(id);
     }
 
     @Override
     @Transactional
     public void updateRun(ScheduleRunDto scheduleRunDto) {
         scheduleRepository.updateRun(scheduleRunDto);
+        if(scheduleRunDto.getRun()){
+            //동작이면 컴폰넌트에 정보 추가
+            ScheduleDto scheduleDto = this.findById(scheduleRunDto.getId());
+            componentUpdate(scheduleDto);
+        }else{
+            //스톱이면 컴포넌트에 정보 삭제
+            componentDelete(scheduleRunDto.getId());
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<ScheduleDto> findByRun(boolean run) {
+        return scheduleRepository.findByRun(run).stream().map(ScheduleDto::new).toList();
     }
 }

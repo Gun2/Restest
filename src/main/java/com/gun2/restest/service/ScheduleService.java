@@ -18,4 +18,6 @@ public interface ScheduleService {
     void delete(long id);
 
     void updateRun(ScheduleRunDto scheduleRunDto);
+
+    List<ScheduleDto> findByRun(boolean run);
 }
