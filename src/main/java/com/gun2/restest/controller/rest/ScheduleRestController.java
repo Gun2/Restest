@@ -1,5 +1,6 @@
 package com.gun2.restest.controller.rest;
 
+import com.gun2.restest.component.scheduler.SchedulerInfo;
 import com.gun2.restest.constant.SuccessCode;
 import com.gun2.restest.dto.ScheduleDto;
 import com.gun2.restest.dto.ScheduleRunDto;
@@ -9,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -60,5 +62,4 @@ public class ScheduleRestController {
         scheduleService.updateRun(scheduleRunDto);
         return new SuccessResponse(scheduleRunDto).toResponseEntity(SuccessCode.OK);
     }
-
 }
