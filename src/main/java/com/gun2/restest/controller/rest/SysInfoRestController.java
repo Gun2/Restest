@@ -43,6 +43,19 @@ public class SysInfoRestController {
         sendingOperations.convertAndSend("/sys-info/failure", failureCountComponent.getNumber());
     }
 
+    /**
+     * <b>성공 카운터를 증가시키고 전파</b>
+     */
+    public void increaseSuccessNumber(){
+        successCountComponent.increaseNumber();
+        this.successNumber("");
+    }
 
-
+    /**
+     * <b>실패 카운터를 증가시키고 전파</b>
+     */
+    public void increaseFailureNumber(){
+        failureCountComponent.increaseNumber();
+        this.failureNumber("");
+    }
 }
