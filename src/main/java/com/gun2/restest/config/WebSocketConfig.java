@@ -42,7 +42,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/sys-info/user",
                 "/sys-info/success",
-                "/sys-info/failure"
+                "/sys-info/failure",
+                "/scheduler"
         );
         registry.setApplicationDestinationPrefixes("/app");
     }
