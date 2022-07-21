@@ -1,5 +1,6 @@
 package com.gun2.restest.service.impl;
 
+import com.gun2.restest.component.scheduler.SchedulerComponent;
 import com.gun2.restest.dto.JobDto;
 import com.gun2.restest.entity.Job;
 import com.gun2.restest.exception.IdentityIsNullException;
@@ -28,6 +29,7 @@ public class JobServiceImpl implements JobService {
     private final JobHeaderRepository jobHeaderRepository;
     private final JobBodyRepository jobBodyRepository;
     private final ScheduleJobRepository scheduleJobRepository;
+    private final SchedulerComponent schedulerComponent;
 
     @Override
     @Transactional
@@ -64,7 +66,9 @@ public class JobServiceImpl implements JobService {
         target.orElseGet(() -> {
             throw new RowNotFoundFromIdException("update할 entity를 찾지 못했습니다.", jobDto.getId());
         });
-        return this.insert(jobDto);
+        JobDto insertResult =  this.insert(jobDto);
+        updateComponent(jobDto);
+        return insertResult;
     }
 
     @Override
@@ -74,6 +78,24 @@ public class JobServiceImpl implements JobService {
         jobHeaderRepository.deleteAllByJobId(id);
         jobBodyRepository.deleteAllByJobId(id);
         jobRepository.deleteById(id);
+        deleteComponent(id);
+    }
+
+    /**
+     * TODO : 트랜젝션에 따른 롤백 방안 필요.
+     * <b>업데이트된 업무와 관련된 스케줄러를 업데이트한다.</b>
+     * @param jobDto
+     */
+    public void updateComponent(JobDto jobDto){
+        schedulerComponent.updateJob(jobDto);
+    }
+
+    /**
+     * <b>job 삭제 시 구동중인 스케줄러에서도 삭제</b>
+     * @param id 삭제할 job id
+     */
+    public void deleteComponent(Long id){
+        schedulerComponent.deleteJob(id);
     }
 }
 
