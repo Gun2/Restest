@@ -49,6 +49,7 @@ public class ScheduleDto implements Serializable {
         return Schedule.builder()
                 .id(this.id)
                 .title(this.title)
+                .delay(this.delay)
                 .run(this.run)
                 .build();
     }
