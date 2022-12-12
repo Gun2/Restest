@@ -1,6 +1,7 @@
 package com.gun2.restest.dto;
 
 import com.gun2.restest.entity.JobParam;
+import com.gun2.restest.form.request.JobParamRequest;
 import lombok.*;
 
 import java.io.Serializable;
@@ -29,6 +30,15 @@ public class JobParamDto implements Serializable {
         this.createdAt = jobParam.getCreatedAt();
         this.updateAt = jobParam.getUpdateAt();
         this.usable = jobParam.isUsable();
+    }
+
+    public JobParamDto(JobParamRequest jobParamRequest){
+        this.id = jobParamRequest.getId();
+        this.jobId = jobParamRequest.getJobId();
+        this.keyName = jobParamRequest.getKeyName();
+        this.value = jobParamRequest.getValue();
+        this.description = jobParamRequest.getDescription();
+        this.usable = jobParamRequest.isUsable();
     }
 
     public JobParam toEntity(){

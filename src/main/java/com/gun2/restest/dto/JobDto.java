@@ -3,10 +3,13 @@ package com.gun2.restest.dto;
 import com.gun2.restest.constant.Method;
 import com.gun2.restest.entity.Job;
 import com.gun2.restest.entity.JobHeader;
+import com.gun2.restest.form.request.JobRequest;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,10 +21,8 @@ import java.util.List;
 @NoArgsConstructor
 public class JobDto implements Serializable {
     private Long id;
-    @NotBlank
     private String title;
     private Method method;
-    @URL
     private String url;
     private List<JobParamDto> jobParamList = new ArrayList<>();
     private List<JobHeaderDto> jobHeaderList = new ArrayList<>();
@@ -39,6 +40,16 @@ public class JobDto implements Serializable {
         this.jobBodyList = job.getJobBodyList().stream().map(JobBodyDto::new).toList();
         this.createdAt = job.getCreatedAt();
         this.updateAt = job.getUpdateAt();
+    }
+
+    public JobDto(JobRequest jobRequest){
+        this.id = jobRequest.getId();
+        this.title = jobRequest.getTitle();
+        this.method = jobRequest.getMethod();
+        this.url = jobRequest.getUrl();
+        this.jobParamList = jobRequest.getJobParamList().stream().map(JobParamDto::new).toList();
+        this.jobHeaderList = jobRequest.getJobHeaderList().stream().map(JobHeaderDto::new).toList();
+        this.jobBodyList = jobRequest.getJobBodyList().stream().map(JobBodyDto::new).toList();
     }
 
     public Job toEntity(){

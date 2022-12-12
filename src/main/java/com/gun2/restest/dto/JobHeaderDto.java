@@ -2,6 +2,7 @@ package com.gun2.restest.dto;
 
 import com.gun2.restest.entity.JobHeader;
 import com.gun2.restest.entity.JobParam;
+import com.gun2.restest.form.request.JobHeaderRequest;
 import lombok.*;
 
 import java.io.Serializable;
@@ -30,6 +31,15 @@ public class JobHeaderDto implements Serializable {
         this.createdAt = jobHeader.getCreatedAt();
         this.updateAt = jobHeader.getUpdateAt();
         this.usable = jobHeader.isUsable();
+    }
+
+    public JobHeaderDto(JobHeaderRequest jobHeaderRequest){
+        this.id = jobHeaderRequest.getId();
+        this.jobId = jobHeaderRequest.getJobId();
+        this.keyName = jobHeaderRequest.getKeyName();
+        this.value = jobHeaderRequest.getValue();
+        this.description = jobHeaderRequest.getDescription();
+        this.usable = jobHeaderRequest.isUsable();
     }
 
     public JobHeader toEntity(){

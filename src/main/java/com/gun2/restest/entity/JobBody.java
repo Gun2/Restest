@@ -18,6 +18,7 @@ public class JobBody {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long jobId;
+    @Column(length = 4096)
     private String body;
     private Integer afterDelay;
 
