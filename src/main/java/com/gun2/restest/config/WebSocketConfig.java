@@ -40,10 +40,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/sys-info/user",
+        registry.enableSimpleBroker(
+                "/sys-info/user",
                 "/sys-info/success",
                 "/sys-info/failure",
-                "/scheduler"
+                "/scheduler",
+                "/change-data-spreader/job",
+                "/change-data-spreader/schedule"
         );
         registry.setApplicationDestinationPrefixes("/app");
     }
