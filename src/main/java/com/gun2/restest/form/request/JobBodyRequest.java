@@ -23,7 +23,6 @@ public class JobBodyRequest implements Serializable {
     @Column(length = 30)
     private String body;
 
-    @NotNull
     @Range(min = 0, max = 1000000)
     private Integer afterDelay;
 
