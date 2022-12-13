@@ -3,6 +3,7 @@ package com.gun2.restest.dto;
 import com.gun2.restest.entity.Job;
 import com.gun2.restest.entity.Schedule;
 import com.gun2.restest.entity.ScheduleJob;
+import com.gun2.restest.form.request.ScheduleRequest;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -21,9 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ScheduleDto implements Serializable {
     private Long id;
-    @NotBlank
     private String title;
-    @Range(min = 0, max = 86400)
     private Integer delay;
 
     private boolean run;
@@ -43,6 +42,15 @@ public class ScheduleDto implements Serializable {
         this.createdAt = schedule.getCreatedAt();
         this.updateAt = schedule.getUpdateAt();
         this.run = schedule.isRun();
+    }
+
+    public ScheduleDto(ScheduleRequest scheduleRequest) {
+        this.id = scheduleRequest.getId();
+        this.title = scheduleRequest.getTitle();
+        this.delay = scheduleRequest.getDelay();
+        this.jobList = scheduleRequest.getJobList();
+        this.jobIdList = scheduleRequest.getJobIdList();
+        this.run = scheduleRequest.isRun();
     }
 
     public Schedule toEntity(){

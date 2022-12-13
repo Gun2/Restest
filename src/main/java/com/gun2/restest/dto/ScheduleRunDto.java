@@ -1,5 +1,6 @@
 package com.gun2.restest.dto;
 
+import com.gun2.restest.form.request.ScheduleRunRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +16,11 @@ import javax.validation.constraints.NotNull;
 @ToString
 @NoArgsConstructor
 public class ScheduleRunDto {
-    @NotNull
     private Long id;
-    @NotNull
     private Boolean run;
+
+    public ScheduleRunDto(ScheduleRunRequest scheduleRunRequest) {
+        this.id = scheduleRunRequest.getId();
+        this.run = scheduleRunRequest.getRun();
+    }
 }
