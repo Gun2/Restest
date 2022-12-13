@@ -6,6 +6,7 @@ import com.gun2.restest.exception.GlobalExceptionHandler;
 import com.gun2.restest.form.request.JobRequest;
 import com.gun2.restest.form.response.ErrorResponse;
 import com.gun2.restest.service.JobService;
+import com.gun2.restest.spreader.JobChangeDataSpreader;
 import lombok.extern.slf4j.Slf4j;
 import static org.assertj.core.api.Assertions.*;
 
@@ -47,9 +48,11 @@ class JobRestControllerTest {
     class ValidationTest{
         @Mock
         JobService jobService;
+        @Mock
+        JobChangeDataSpreader changeDataSpreader;
         @BeforeEach
         void init(){
-            mockMvc = MockMvcBuilders.standaloneSetup(new JobRestController(jobService))
+            mockMvc = MockMvcBuilders.standaloneSetup(new JobRestController(jobService, changeDataSpreader))
                     .setControllerAdvice(GlobalExceptionHandler.class)
                     .build();
         }
