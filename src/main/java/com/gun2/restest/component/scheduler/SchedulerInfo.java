@@ -1,6 +1,8 @@
 package com.gun2.restest.component.scheduler;
 
+import com.gun2.restest.dto.HttpResponseDto;
 import com.gun2.restest.dto.ScheduleDto;
+import com.gun2.restest.util.LimitedQueue;
 import lombok.Getter;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,8 +18,13 @@ public class SchedulerInfo {
     private AtomicInteger successCount = new AtomicInteger();
     //실패횟수
     private AtomicInteger failureCount = new AtomicInteger();
+    //마지막 응답시간
+    private long lastTime = 0;
     //동작 스레드
     private Thread runThread = new Thread();
+    private LimitedQueue<HttpResponseDto> successResponseList = new LimitedQueue<>(100);
+    private LimitedQueue<HttpResponseDto> failureResponseList = new LimitedQueue<>(100);
+
 
     /**
      * 새로 생성
@@ -38,4 +45,25 @@ public class SchedulerInfo {
     public void setRunThread(Thread runThread){
         this.runThread = runThread;
     }
+
+    public void setLastTime(long lastTime) {
+        this.lastTime = lastTime;
+    }
+
+    /**
+     * <p>성공 기록 저장</p>
+     * @param httpResponseDto
+     */
+    public void recordSucceedResponse(HttpResponseDto httpResponseDto){
+        this.successResponseList.push(httpResponseDto);
+    }
+
+    /**
+     * <p>살패 기록 저장</p>
+     * @param httpResponseDto
+     */
+    public void recordFailureResponse(HttpResponseDto httpResponseDto){
+        this.failureResponseList.push(httpResponseDto);
+    }
 }
+

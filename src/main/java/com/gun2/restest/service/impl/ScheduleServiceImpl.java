@@ -11,6 +11,7 @@ import com.gun2.restest.repository.ScheduleRepository;
 import com.gun2.restest.service.ScheduleJobService;
 import com.gun2.restest.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -29,7 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     @Transactional
     public List<ScheduleDto> findAll() {
-        return scheduleRepository.findAll().stream().map(ScheduleDto::new).toList();
+        return scheduleRepository.findAll(Sort.by(Sort.Direction.DESC,"id")).stream().map(ScheduleDto::new).toList();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.gun2.restest.component;
 
 import com.gun2.restest.component.scheduler.SchedulerComponent;
+import com.gun2.restest.component.scheduler.SchedulerLogConsumer;
 import com.gun2.restest.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,6 @@ public class AppComponent {
     public AppComponent(SchedulerComponent schedulerComponent, ScheduleService scheduleService) {
         this.schedulerComponent = schedulerComponent;
         this.scheduleService = scheduleService;
-
         this.init();
     }
 

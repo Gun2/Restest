@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ScheduleRequest implements Serializable {
     private Long id;
     @NotBlank
+    @Length(max = 255)
     private String title;
     @NotNull
     @Range(min = 0, max = 86400)
