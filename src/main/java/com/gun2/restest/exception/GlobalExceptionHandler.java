@@ -135,12 +135,37 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * <b>성능측정 시작을 요청했으나 성능측정이 이미 동작상태인 경우</b>
+     * @param e {@link PerformanceIsNotRunningException}
+     * @return {@link ResponseEntity}
+     */
+    @ExceptionHandler(PerformanceIsNotRunningException.class)
+    protected ResponseEntity<ErrorResponse> handlePerformanceIsNotRunningException(PerformanceIsNotRunningException e){
+        log.error("handlePerformanceIsNotRunningException", e);
+        return new ErrorResponse().toResponseEntity(ErrorCode.PERFORMANCE_IS_ALREADY_RUNNING);
+    }
+
+    /**
+     * <b>성능측정 중지를 요청했으나 성능측정이 동작상태가 아닌 경우</b>
+     * @param e {@link PerformanceIsAlreadyRunningException}
+     * @return {@link ResponseEntity}
+     */
+    @ExceptionHandler(PerformanceIsAlreadyRunningException.class)
+    protected ResponseEntity<ErrorResponse> handlePerformanceIsAlreadyRunningException(PerformanceIsAlreadyRunningException e){
+        log.error("handlePerformanceIsAlreadyRunningException", e);
+        return new ErrorResponse().toResponseEntity(ErrorCode.PERFORMANCE_IS_NOT_RUNNING);
+    }
+
+
+
+    /**
      * <b>기타 정의하지 않은 예외 발생 시</b>
      * @param e {@link Exception}
      * @return {@link ResponseEntity}
      */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e){
+        log.error("handleException", e);
         return new ErrorResponse().toResponseEntity(ErrorCode.INTERNAL_SERVER_ERROR);
     }
 }

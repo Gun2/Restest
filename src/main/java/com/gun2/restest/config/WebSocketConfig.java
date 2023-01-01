@@ -46,7 +46,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 "/sys-info/failure",
                 "/scheduler",
                 "/change-data-spreader/job",
-                "/change-data-spreader/schedule"
+                "/change-data-spreader/schedule",
+                "/performance"
         );
         registry.setApplicationDestinationPrefixes("/app");
     }

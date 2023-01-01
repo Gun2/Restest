@@ -7,6 +7,8 @@ public enum ErrorCode implements ResponseCode{
     NOT_FOUND_BY_ID(400,"NOT_FOUND_BY_ID", "Not Found By Id"),
     ID_IS_NULL(400,"ID_IS_NULL", "Not Receiving Identify Value"),
     INVALID_TYPE_VALUE(400,"INVALID_TYPE_VALUE", " Invalid Type Value"),
+    PERFORMANCE_IS_NOT_RUNNING(400,"PERFORMANCE_IS_NOT_RUNNING", "Is not running."),
+    PERFORMANCE_IS_ALREADY_RUNNING(400,"PERFORMANCE_IS_ALREADY_RUNNING", "Is already running."),
     HANDLE_ACCESS_DENIED(403 ,"HANDLE_ACCESS_DENIED", "Access is Denied"),
     METHOD_NOT_ALLOWED(405,"METHOD_NOT_ALLOWED", "Invalid Input Value"),
     CONTENT_TYPE_NOT_SUPPORTED(406,"CONTENT_TYPE_NOT_SUPPORTED", "Content Type Not Supported"),
