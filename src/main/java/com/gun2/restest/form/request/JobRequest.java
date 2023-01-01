@@ -30,6 +30,7 @@ public class JobRequest implements Serializable {
     @NotBlank
     @Length(max = 255)
     private String url;
+    private String color;
     @Valid
     private List<JobParamRequest> jobParamList = new ArrayList<>();
     @Valid

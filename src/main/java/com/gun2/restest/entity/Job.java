@@ -21,13 +21,11 @@ public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
-
     private Method method;
-
-    @URL
     private String url;
+    @Column(name = "color", length = 7)
+    private String color;
 
     @OneToMany
     @JoinColumn(name = "jobId")
@@ -49,11 +47,12 @@ public class Job {
     private LocalDateTime updateAt;
 
     @Builder
-    public Job(Long id, String title, Method method, String url, List<JobParam> jobParamList, List<JobHeader> jobHeaderList, List<JobBody> jobBodyList) {
+    public Job(Long id, String title, Method method, String url, String color, List<JobParam> jobParamList, List<JobHeader> jobHeaderList, List<JobBody> jobBodyList) {
         this.id = id;
         this.title = title;
         this.method = method;
         this.url = url;
+        this.color = color;
         this.jobParamList = jobParamList;
         this.jobHeaderList = jobHeaderList;
         this.jobBodyList = jobBodyList;

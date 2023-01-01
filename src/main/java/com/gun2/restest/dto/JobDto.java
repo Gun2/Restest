@@ -24,6 +24,7 @@ public class JobDto implements Serializable {
     private String title;
     private Method method;
     private String url;
+    private String color;
     private List<JobParamDto> jobParamList = new ArrayList<>();
     private List<JobHeaderDto> jobHeaderList = new ArrayList<>();
     private List<JobBodyDto> jobBodyList = new ArrayList<>();
@@ -35,6 +36,7 @@ public class JobDto implements Serializable {
         this.title = job.getTitle();
         this.method = job.getMethod();
         this.url = job.getUrl();
+        this.color = job.getColor();
         this.jobParamList = job.getJobParamList().stream().map(JobParamDto::new).toList();
         this.jobHeaderList = job.getJobHeaderList().stream().map(JobHeaderDto::new).toList();
         this.jobBodyList = job.getJobBodyList().stream().map(JobBodyDto::new).toList();
@@ -47,6 +49,7 @@ public class JobDto implements Serializable {
         this.title = jobRequest.getTitle();
         this.method = jobRequest.getMethod();
         this.url = jobRequest.getUrl();
+        this.color = jobRequest.getColor();
         this.jobParamList = jobRequest.getJobParamList().stream().map(JobParamDto::new).toList();
         this.jobHeaderList = jobRequest.getJobHeaderList().stream().map(JobHeaderDto::new).toList();
         this.jobBodyList = jobRequest.getJobBodyList().stream().map(JobBodyDto::new).toList();
@@ -58,6 +61,7 @@ public class JobDto implements Serializable {
                 .title(this.title)
                 .method(this.method)
                 .url(this.url)
+                .color(this.color)
                 .jobParamList(this.jobParamList.stream().map(dto -> dto.toEntity()).toList())
                 .jobHeaderList(this.jobHeaderList.stream().map(dto -> dto.toEntity()).toList())
                 .jobBodyList(this.jobBodyList.stream().map(dto -> dto.toEntity()).toList())

@@ -10,8 +10,10 @@ import com.gun2.restest.repository.JobHeaderRepository;
 import com.gun2.restest.repository.JobRepository;
 import com.gun2.restest.repository.ScheduleJobRepository;
 import com.gun2.restest.service.JobService;
+import com.gun2.restest.util.ColorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +55,8 @@ public class JobServiceImpl implements JobService {
     @Override
     @Transactional
     public JobDto insert(JobDto jobDto) {
+        setColorOfJob(jobDto);
+
         Job job = jobDto.toEntity();
         jobHeaderRepository.saveAll(job.getJobHeaderList());
         jobBodyRepository.saveAll(job.getJobBodyList());
@@ -60,7 +64,18 @@ public class JobServiceImpl implements JobService {
         return new JobDto(result);
     }
 
+    /**
+     * <p>job에 색상 설정이 없는 경우 생상 부여</p>
+     * @param jobDto
+     */
+    private void setColorOfJob(JobDto jobDto) {
+        if(StringUtils.isBlank(jobDto.getColor())){
+            jobDto.setColor(new ColorUtil().generateLightHexColor());
+        }
+    }
+
     @Override
+    @Transactional
     public JobDto update(JobDto jobDto) {
         Optional<Job> target = jobRepository.findById(jobDto.getId());
         target.orElseGet(() -> {
