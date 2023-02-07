@@ -58,8 +58,8 @@ public class JobServiceImpl implements JobService {
         setColorOfJob(jobDto);
 
         Job job = jobDto.toEntity();
-        jobHeaderRepository.saveAll(job.getJobHeaderList());
-        jobBodyRepository.saveAll(job.getJobBodyList());
+//        jobHeaderRepository.saveAll(job.getJobHeaderList());
+//        jobBodyRepository.saveAll(job.getJobBodyList());
         Job result = jobRepository.save(job);
         return new JobDto(result);
     }
@@ -81,6 +81,7 @@ public class JobServiceImpl implements JobService {
         target.orElseGet(() -> {
             throw new RowNotFoundFromIdException("update할 entity를 찾지 못했습니다.", jobDto.getId());
         });
+        //deleteNotRefEntity(jobDto);
         JobDto insertResult =  this.insert(jobDto);
         updateComponent(jobDto);
         return insertResult;

@@ -17,7 +17,10 @@ public class JobBody {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long jobId;
+
+    @ManyToOne
+    @JoinColumn
+    private Job job;
     @Column(length = 4096)
     private String body;
     private Integer afterDelay;
@@ -32,12 +35,16 @@ public class JobBody {
     private boolean usable;
 
     @Builder
-    public JobBody(Long id, Long jobId, String body, Integer afterDelay, boolean usable) {
+    public JobBody(Long id, Job job, String body, Integer afterDelay, boolean usable) {
         this.id = id;
-        this.jobId = jobId;
         this.body = body;
+        this.job = job;
         this.createdAt = createdAt;
         this.updateAt = updateAt;
         this.usable = usable;
+    }
+
+    public void updateJob(Job job){
+        this.job = job;
     }
 }

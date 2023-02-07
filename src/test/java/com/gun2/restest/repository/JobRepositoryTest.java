@@ -1,61 +1,79 @@
 package com.gun2.restest.repository;
 
+import com.gun2.restest.config.QueryDslConfig;
 import com.gun2.restest.constant.Method;
 import com.gun2.restest.entity.Job;
+import com.gun2.restest.entity.JobBody;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @DataJpaTest
+@Import(QueryDslConfig.class)
 public class JobRepositoryTest {
 
     @Autowired
     private JobRepository jobRepository;
 
+    @Autowired
+    JobBodyRepository jobBodyRepository;
+
     @Nested
     @DisplayName("CRUD 테스트")
-    class Crud{
+    class Crud {
 
         @Test
-        @DisplayName("생성, 읽기, 수정, 삭제 테스트")
-        void test01(){
+        @DisplayName("JobBody 생성 및 삭제 테스트")
+
+        void test02() {
+            /** given */
+            ArrayList<JobBody> bodyList = new ArrayList<>();
+            bodyList.add(JobBody.builder().build());
+            bodyList.add(JobBody.builder().build());
+            Job save = jobRepository.save(
+                    Job.builder()
+                            .jobBodyList(bodyList)
+                            .build()
+            );
+
+            Job job = jobRepository.findById(save.getId()).get();
+
+            /** when */
+            int afterSaveCnt = job.getJobBodyList().size();
+            job.getJobBodyList().remove(save.getJobBodyList().get(0));
+            Job updatedJob = jobRepository.save(job);
+            int afterUpdateCnt = updatedJob.getJobBodyList().size();
+
+            /** then */
+            assertThat(afterSaveCnt).as("job body가 2개 생성됨")
+                    .isEqualTo(2);
+            assertThat(afterUpdateCnt).as("job body가 1개 남음")
+                    .isEqualTo(1);
+        }
+
+        @Test
+        @DisplayName("삭제 테스트")
+        void test01() {
+            /** given */
             Job job = Job.builder().method(Method.GET).build();
-            jobRepository.save(job);
+            Job savedJob = jobRepository.save(job);
 
-            assertThat(job.getId()).as("Insert 후 부여받은 ID 확인")
-                    .isNotNull();
+            /** when */
+            jobRepository.delete(savedJob);
 
-            log.info("created id : {}", job.getId());
-            long id = job.getId();
-
-            Job updateJob = Job.builder().id(job.getId()).title("무야호").build();
-            jobRepository.save(updateJob);
-
-            assertThat(job.getTitle()).as("타이틀 수정 확인").isEqualTo("무야호");
-            log.info("updated title : {}", job.getTitle());
-
-            jobRepository.delete(updateJob);
-
-            Optional<Job> findJob = jobRepository.findById(id);
-
-            Throwable thrown = catchThrowable(() -> {
-                findJob.orElseGet(() -> {
-                    throw new EntityNotFoundException("해당 row 를 찾을 수 없습니다.");
-                });
-            });
-            assertThat(thrown)
-                    .as("entity 삭제 확인")
-                    .isInstanceOf(EntityNotFoundException.class);
-
+            /** then */
+            Optional<Job> byId = jobRepository.findById(savedJob.getId());
+            assertThat(byId.isEmpty()).isTrue();
         }
 
     }

@@ -56,7 +56,7 @@ public class JobDto implements Serializable {
     }
 
     public Job toEntity(){
-        return Job.builder()
+        Job job = Job.builder()
                 .id(this.id)
                 .title(this.title)
                 .method(this.method)
@@ -66,6 +66,10 @@ public class JobDto implements Serializable {
                 .jobHeaderList(this.jobHeaderList.stream().map(dto -> dto.toEntity()).toList())
                 .jobBodyList(this.jobBodyList.stream().map(dto -> dto.toEntity()).toList())
                 .build();
+        job.getJobBodyList().forEach(jobBody -> {jobBody.updateJob(job);});
+        job.getJobParamList().forEach(jobParam -> {jobParam.updateJob(job);});
+        job.getJobHeaderList().forEach(jobHeader -> {jobHeader.updateJob(job);});
+        return job;
     }
 
 }

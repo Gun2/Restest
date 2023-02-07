@@ -17,7 +17,9 @@ public class JobHeader {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long jobId;
+    @ManyToOne
+    @JoinColumn(name = "job_id")
+    private Job job;
 
     private String keyName;
     private String value;
@@ -34,12 +36,16 @@ public class JobHeader {
     private boolean usable;
 
     @Builder
-    public JobHeader(Long id, Long jobId, String keyName, String value, String description, boolean usable) {
+    public JobHeader(Long id, Job job, String keyName, String value, String description, boolean usable) {
         this.id = id;
-        this.jobId = jobId;
+        this.job = job;
         this.keyName = keyName;
         this.value = value;
         this.description = description;
         this.usable = usable;
+    }
+
+    public void updateJob(Job job){
+        this.job = job;
     }
 }

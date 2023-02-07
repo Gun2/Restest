@@ -1,5 +1,6 @@
 package com.gun2.restest.dto;
 
+import com.gun2.restest.entity.Job;
 import com.gun2.restest.entity.JobBody;
 import com.gun2.restest.form.request.JobBodyRequest;
 import io.swagger.models.auth.In;
@@ -18,7 +19,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class JobBodyDto implements Serializable {
     private Long id;
-    private Long jobId;
     private String body;
     private Integer afterDelay;
 
@@ -28,7 +28,6 @@ public class JobBodyDto implements Serializable {
 
     public JobBodyDto(JobBody jobBody){
         this.id = jobBody.getId();
-        this.jobId = jobBody.getJobId();
         this.body = jobBody.getBody();
         this.afterDelay = jobBody.getAfterDelay();
         this.createdAt = jobBody.getCreatedAt();
@@ -38,7 +37,6 @@ public class JobBodyDto implements Serializable {
 
     public JobBodyDto(JobBodyRequest jobBodyRequest){
         this.id = jobBodyRequest.getId();
-        this.jobId = jobBodyRequest.getJobId();
         this.body = jobBodyRequest.getBody();
         this.afterDelay = jobBodyRequest.getAfterDelay();
         this.usable = jobBodyRequest.isUsable();
@@ -47,7 +45,6 @@ public class JobBodyDto implements Serializable {
     public JobBody toEntity(){
         return JobBody.builder()
                 .id(this.id)
-                .jobId(this.jobId)
                 .body(this.body)
                 .afterDelay(this.afterDelay)
                 .usable(this.usable)
