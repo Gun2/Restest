@@ -46,10 +46,6 @@ public class PerformanceTaskMeasurer {
                     long duringTime = runTime - last.getRunTime();
                     long duringCnt = cnt - last.getCnt();
                     int rpm = calcRpm(duringTime, duringCnt);
-                    if(rpm < 0){
-                        log.error("runTime : {}, last Time : {}", runTime, last.getRunTime());
-                        log.error("currentTime : {}, start Time : {}",currentTime, performanceTask.getStartTimeMillisecond());
-                    }
                     PerformanceTaskMeasure performanceTaskMeasure = new PerformanceTaskMeasure(jobId,
                             runTime,
                             cnt,
@@ -116,9 +112,6 @@ public class PerformanceTaskMeasurer {
         if (duringTime != 0){
             long minuteMillisecond = 1000 * 60;
             int result = (int) (minuteMillisecond / duringTime * duringCnt);
-            if(result < 0){
-                log.error("minuteMillisecond : {}, duringTime : {}, duringCnt : {}", minuteMillisecond, duringTime, duringCnt);
-            }
             return result;
         }
         return 0;
