@@ -16,10 +16,10 @@ import org.springframework.validation.FieldError;
 @Slf4j
 public class PerformanceServiceImpl implements PerformanceService {
 
-    @Value("${max-performance-test-instance:10}")
+    @Value("${app.default.value.max-performance-test-instance:10}")
     private int maxPerformanceTestInstance;
 
-    @Value("${max-performance-test-job:5}")
+    @Value("${app.default.value.max-performance-test-job:5}")
     private int masPerformanceTestJob;
 
     private final PerformanceTaskManager performanceTaskManager;
