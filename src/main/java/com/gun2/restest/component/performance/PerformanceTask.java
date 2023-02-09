@@ -155,4 +155,8 @@ public class PerformanceTask{
     public int getTotalRequestCount(){
         return successCount.get() + failureCount.get();
     }
+
+    public long getMinMillisecond() {
+        return minMillisecond == Long.MAX_VALUE ? 0 : minMillisecond;
+    }
 }
