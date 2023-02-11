@@ -13,6 +13,6 @@ public class JobHeaderCustomRepositoryImpl implements JobHeaderCustomRepository 
 
     @Override
     public void deleteAllByJobId(@NonNull Long jobId) {
-        queryFactory.delete(jobHeader).where(jobHeader.jobId.eq(jobId)).execute();
+        queryFactory.delete(jobHeader).where(jobHeader.job.id.eq(jobId)).execute();
     }
 }

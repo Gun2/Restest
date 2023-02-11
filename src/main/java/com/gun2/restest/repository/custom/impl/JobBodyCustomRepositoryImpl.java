@@ -15,6 +15,6 @@ public class JobBodyCustomRepositoryImpl implements JobBodyCustomRepository {
 
     @Override
     public void deleteAllByJobId(@NonNull Long jobId) {
-        queryFactory.delete(jobBody).where(jobBody.jobId.eq(jobId)).execute();
+        queryFactory.delete(jobBody).where(jobBody.job.id.eq(jobId)).execute();
     }
 }
