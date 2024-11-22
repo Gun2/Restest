@@ -7,8 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 

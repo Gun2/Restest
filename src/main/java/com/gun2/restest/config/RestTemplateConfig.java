@@ -2,25 +2,18 @@ package com.gun2.restest.config;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.config.Registry;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.conn.socket.PlainConnectionSocketFactory;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
-import org.apache.http.ssl.SSLContexts;
-import org.apache.http.ssl.TrustStrategy;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.apache.hc.client5.http.ssl.TrustAllStrategy;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -43,25 +36,23 @@ public class RestTemplateConfig {
      * @throws KeyManagementException
      */
     public static RestTemplate create() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
-        TrustStrategy acceptingTrustStrategy = (cert, authType) -> true;
-        SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
 
-        SSLConnectionSocketFactory sslFactory = new SSLConnectionSocketFactory(sslContext,
-                NoopHostnameVerifier.INSTANCE);
-
-        Registry<ConnectionSocketFactory> socketFactoryRegistry =
-                RegistryBuilder.<ConnectionSocketFactory> create()
-                        .register("https", sslFactory)
-                        .register("http", new PlainConnectionSocketFactory())
-                        .build();
-
-        BasicHttpClientConnectionManager connectionManager =
-                new BasicHttpClientConnectionManager(socketFactoryRegistry);
-        CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(sslFactory)
-                .setConnectionManager(connectionManager).setMaxConnPerRoute(300).setMaxConnTotal(300).build();
+        // HttpClient 생성
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setConnectionManager(PoolingHttpClientConnectionManagerBuilder.create()
+                        .setMaxConnPerRoute(Integer.MAX_VALUE)
+                        .setMaxConnTotal(Integer.MAX_VALUE)
+                        .setSSLSocketFactory(SSLConnectionSocketFactoryBuilder.create()
+                                .setSslContext(SSLContextBuilder.create()
+                                        .loadTrustMaterial(TrustAllStrategy.INSTANCE)
+                                        .build())
+                                .setHostnameVerifier(NoopHostnameVerifier.INSTANCE)
+                                .build())
+                        .build())
+                .build();
         HttpComponentsClientHttpRequestFactory requestFactory =
                 new HttpComponentsClientHttpRequestFactory();
-        requestFactory.setHttpClient(httpClient);
+        requestFactory.setHttpClient(httpclient);
         RestTemplate restTemplate = new RestTemplate(requestFactory);
         return restTemplate;
     }

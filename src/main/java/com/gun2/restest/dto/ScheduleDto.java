@@ -9,8 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Range;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

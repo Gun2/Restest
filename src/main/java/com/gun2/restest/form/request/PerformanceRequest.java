@@ -2,7 +2,7 @@ package com.gun2.restest.form.request;
 
 import lombok.Getter;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Getter
 public class PerformanceRequest {

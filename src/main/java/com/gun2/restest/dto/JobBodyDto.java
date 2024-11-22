@@ -1,15 +1,12 @@
 package com.gun2.restest.dto;
 
-import com.gun2.restest.entity.Job;
 import com.gun2.restest.entity.JobBody;
 import com.gun2.restest.form.request.JobBodyRequest;
-import io.swagger.models.auth.In;
-import lombok.*;
-import org.hibernate.validator.constraints.Range;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
