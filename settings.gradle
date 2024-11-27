@@ -1,1 +1,3 @@
 rootProject.name = 'restest'
+
+include(':app:manager-app')
