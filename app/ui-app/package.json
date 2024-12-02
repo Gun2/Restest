@@ -1,5 +1,5 @@
 {
-  "name": "restest-web-app",
+  "name": "ui-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
