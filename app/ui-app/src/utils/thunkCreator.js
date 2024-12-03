@@ -1,6 +1,6 @@
-import {hideLoadingAction, showLoadingAction} from "../modules/loading";
-import {removeMessageAction, setMessageAction} from "../modules/validationMessage";
-import {addAlertAction} from "../modules/alertModal";
+import {hideLoadingAction, showLoadingAction} from "../modules/loading.js";
+import {removeMessageAction, setMessageAction} from "../modules/validationMessage.js";
+import {addAlertAction} from "../modules/alertModal.js";
 
 /**
  *
