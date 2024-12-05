@@ -2,14 +2,14 @@ package com.github.gun2.managerapp.impl;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.gun2.restest.dto.ScheduleDto;
-import com.gun2.restest.entity.Job;
-import com.gun2.restest.entity.Schedule;
-import com.gun2.restest.entity.ScheduleJob;
-import com.gun2.restest.repository.JobRepository;
-import com.gun2.restest.repository.ScheduleJobRepository;
-import com.gun2.restest.repository.ScheduleRepository;
-import com.gun2.restest.service.ScheduleService;
+import com.github.gun2.managerapp.dto.ScheduleDto;
+import com.github.gun2.managerapp.entity.Job;
+import com.github.gun2.managerapp.entity.Schedule;
+import com.github.gun2.managerapp.entity.ScheduleJob;
+import com.github.gun2.managerapp.repository.JobRepository;
+import com.github.gun2.managerapp.repository.ScheduleJobRepository;
+import com.github.gun2.managerapp.repository.ScheduleRepository;
+import com.github.gun2.managerapp.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

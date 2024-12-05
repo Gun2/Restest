@@ -1,10 +1,10 @@
 package com.github.gun2.managerapp.impl;
 
 
-import com.gun2.restest.constant.Method;
-import com.gun2.restest.dto.JobDto;
-import com.gun2.restest.exception.RowNotFoundFromIdException;
-import com.gun2.restest.service.JobService;
+import com.github.gun2.managerapp.constant.Method;
+import com.github.gun2.managerapp.dto.JobDto;
+import com.github.gun2.managerapp.exception.RowNotFoundFromIdException;
+import com.github.gun2.managerapp.service.JobService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
