@@ -27,40 +27,40 @@ public class ScheduleRestController {
 
     @ApiOperation(value = "모든 스케줄 조회", notes="스케줄 테이블의 모든 값을 반환")
     @GetMapping(path = "/v1/schedules")
-    public ResponseEntity<SuccessResponse> findAll(){
+    public ResponseEntity<SuccessResponse<List<ScheduleDto>>> findAll(){
         List<ScheduleDto> items = scheduleService.findAll();
         return new SuccessResponse(items).toResponseEntity(SuccessCode.OK);
     }
 
     @GetMapping(path = "/v1/schedules/{id}")
-    public ResponseEntity<SuccessResponse> findById(@PathVariable Long id){
+    public ResponseEntity<SuccessResponse<ScheduleDto>> findById(@PathVariable Long id){
         ScheduleDto scheduleDto = scheduleService.findById(id);
         return new SuccessResponse(scheduleDto).toResponseEntity(SuccessCode.OK);
     }
 
     @PostMapping(path = "/v1/schedules")
-    public ResponseEntity<SuccessResponse> create(@RequestBody @Validated ScheduleRequest scheduleRequest){
+    public ResponseEntity<SuccessResponse<ScheduleDto>> create(@RequestBody @Validated ScheduleRequest scheduleRequest){
         ScheduleDto result = scheduleService.insert(new ScheduleDto(scheduleRequest));
         scheduleChangeDataSpreader.create(result);
         return new SuccessResponse(result).toResponseEntity(SuccessCode.CREATED);
     }
 
     @PutMapping(path = "/v1/schedules")
-    public ResponseEntity<SuccessResponse> update(@RequestBody @Validated ScheduleRequest scheduleRequest){
+    public ResponseEntity<SuccessResponse<ScheduleDto>> update(@RequestBody @Validated ScheduleRequest scheduleRequest){
         ScheduleDto result = scheduleService.update(new ScheduleDto(scheduleRequest));
         scheduleChangeDataSpreader.update(result);
         return new SuccessResponse(result).toResponseEntity(SuccessCode.OK);
     }
 
     @DeleteMapping(path = "/v1/schedules/{id}")
-    public ResponseEntity<SuccessResponse> delete(@PathVariable Long id){
+    public ResponseEntity<SuccessResponse<Void>> delete(@PathVariable Long id){
         scheduleService.delete(id);
         scheduleChangeDataSpreader.delete(id);
         return new SuccessResponse(null).toResponseEntity(SuccessCode.OK);
     }
 
     @PutMapping(path = "/v1/schedules/run")
-    public ResponseEntity<SuccessResponse> runUpdate(@RequestBody @Validated ScheduleRunRequest scheduleRunRequest){
+    public ResponseEntity<SuccessResponse<ScheduleDto>> runUpdate(@RequestBody @Validated ScheduleRunRequest scheduleRunRequest){
         ScheduleRunDto scheduleRunDto = new ScheduleRunDto(scheduleRunRequest);
         scheduleService.updateRun(scheduleRunDto);
         return new SuccessResponse(scheduleRunDto).toResponseEntity(SuccessCode.OK);

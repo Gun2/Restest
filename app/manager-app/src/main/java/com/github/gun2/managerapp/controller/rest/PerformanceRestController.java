@@ -28,19 +28,19 @@ public class PerformanceRestController {
     private final PerformanceService performanceService;
 
     @GetMapping("/v1/performances/max-instance")
-    public ResponseEntity<SuccessResponse> getMaxInstance(){
+    public ResponseEntity<SuccessResponse<Integer>> getMaxInstance(){
         int maxInstance = performanceService.getMaxInstance();
         return SuccessResponse.of(maxInstance).toResponseEntity(SuccessCode.OK);
     }
 
     @GetMapping("/v1/performances/max-job")
-    public ResponseEntity<SuccessResponse> getMaxJob(){
+    public ResponseEntity<SuccessResponse<Integer>> getMaxJob(){
         int maxJob = performanceService.getMaxJob();
         return SuccessResponse.of(maxJob).toResponseEntity(SuccessCode.OK);
     }
 
     @PostMapping("/v1/performances")
-    public ResponseEntity<SuccessResponse> create(@RequestBody @Validated PerformanceCreateRequest performanceCreateRequest, BindingResult bindingResult) throws BindException{
+    public ResponseEntity<SuccessResponse<PerformanceData>> create(@RequestBody @Validated PerformanceCreateRequest performanceCreateRequest, BindingResult bindingResult) throws BindException{
         performanceService.validate(performanceCreateRequest, bindingResult);
         if(bindingResult.hasErrors()){
             throw new BindException(bindingResult);
@@ -50,13 +50,13 @@ public class PerformanceRestController {
     }
 
     @PostMapping("/v1/performances/start")
-    public ResponseEntity<SuccessResponse> start(@RequestBody @Validated PerformanceRequest performanceRequest){
+    public ResponseEntity<SuccessResponse<String>> start(@RequestBody @Validated PerformanceRequest performanceRequest){
         performanceService.start(performanceRequest.getUuid());
         return SuccessResponse.of(performanceRequest.getUuid()).toResponseEntity(SuccessCode.OK);
     }
 
     @PostMapping("/v1/performances/stop")
-    public ResponseEntity<SuccessResponse> stop(@RequestBody @Validated PerformanceRequest performanceRequest){
+    public ResponseEntity<SuccessResponse<String>> stop(@RequestBody @Validated PerformanceRequest performanceRequest){
         performanceService.stop(performanceRequest.getUuid());
         return SuccessResponse.of(performanceRequest.getUuid()).toResponseEntity(SuccessCode.OK);
     }
