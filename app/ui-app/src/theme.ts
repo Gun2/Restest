@@ -1,17 +1,17 @@
 import {css} from 'styled-components';
 
 const colorAdd = (() => {
-    const hexToDec = (hex) => {
+    const hexToDec = (hex : string) => {
         return parseInt(hex, 16);
     }
 
-    const decToHex = (dec) => {
+    const decToHex = (dec : any) => {
         return Number(dec).toString(16);
     }
 
-    const decToHexColor = (dec) => pad(decToHex(colorRange(dec)), 2);
+    const decToHexColor = (dec : number) => pad(decToHex(colorRange(dec)), 2);
 
-    const pad = (num, pad) => {
+    const pad = (num : string, pad : number) => {
         var length = String(num).length;
         for(var i = length; i < pad; i ++){
             num = `0${num}`;
@@ -19,7 +19,7 @@ const colorAdd = (() => {
         return num;
     }
 
-    const colorRange = (num) => {
+    const colorRange = (num : number) => {
         if(num > 255){
             return 255;
         }else if(num < 0){
@@ -28,7 +28,7 @@ const colorAdd = (() => {
         return num;
     }
 
-    return ((color, plus) => {
+    return ((color : string, plus : number) => {
         color = color.replace("#", "");
         if(color.length === 3) {
             color = color + color;
@@ -36,14 +36,15 @@ const colorAdd = (() => {
         var r = hexToDec(color.slice(0,2));
         var g = hexToDec(color.slice(2,4));
         var b = hexToDec(color.slice(4,6));
-        r = decToHexColor(r + plus);
-        g = decToHexColor(g + plus);
-        b = decToHexColor(b + plus);
+        const red = decToHexColor(r + plus);
+        const green = decToHexColor(g + plus);
+        const blue = decToHexColor(b + plus);
         
-        return `#` + r + g + b;
+        return `#${red}${green}${blue}`;
     });
 })();
     
+export type Variant = "primary" | "danger" | "warning" | "info" | "success" | "default" | "panel";
 
 const palette = {
     background : "#212121",
@@ -123,7 +124,7 @@ const backgroundCover = `
 `
 
 const map = {
-    button : (theme) => `
+    button : (theme : Variant) => `
         background-color : ${palette.button[theme]};
         &:focus,
         &:hover{
@@ -140,7 +141,7 @@ const map = {
             background-color : ${colorAdd(palette.button[theme], -150)}
         }
     `,
-    tab : (theme) => `
+    tab : (theme : Variant) => `
         background-color : ${palette.button[theme]};
         &:hover{
             background-color : ${colorAdd(palette.button[theme], 50)}
