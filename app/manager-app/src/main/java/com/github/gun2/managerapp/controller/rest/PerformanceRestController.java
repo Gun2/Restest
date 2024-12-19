@@ -40,7 +40,7 @@ public class PerformanceRestController {
     }
 
     @PostMapping("/v1/performances")
-    public ResponseEntity<SuccessResponse<PerformanceData>> create(@RequestBody @Validated PerformanceCreateRequest performanceCreateRequest, BindingResult bindingResult) throws BindException{
+    public ResponseEntity<SuccessResponse<PerformanceDto>> create(@RequestBody @Validated PerformanceCreateRequest performanceCreateRequest, BindingResult bindingResult) throws BindException{
         performanceService.validate(performanceCreateRequest, bindingResult);
         if(bindingResult.hasErrors()){
             throw new BindException(bindingResult);
