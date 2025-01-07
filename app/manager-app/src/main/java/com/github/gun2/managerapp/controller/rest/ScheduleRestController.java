@@ -33,7 +33,7 @@ public class ScheduleRestController {
     }
 
     @GetMapping(path = "/v1/schedules/{id}")
-    public ResponseEntity<SuccessResponse<ScheduleDto>> findById(@PathVariable Long id){
+    public ResponseEntity<SuccessResponse<ScheduleDto>> findById(@PathVariable("id") Long id){
         ScheduleDto scheduleDto = scheduleService.findById(id);
         return new SuccessResponse(scheduleDto).toResponseEntity(SuccessCode.OK);
     }
@@ -53,7 +53,7 @@ public class ScheduleRestController {
     }
 
     @DeleteMapping(path = "/v1/schedules/{id}")
-    public ResponseEntity<SuccessResponse<Void>> delete(@PathVariable Long id){
+    public ResponseEntity<SuccessResponse<Void>> delete(@PathVariable("id") Long id){
         scheduleService.delete(id);
         scheduleChangeDataSpreader.delete(id);
         return new SuccessResponse(null).toResponseEntity(SuccessCode.OK);

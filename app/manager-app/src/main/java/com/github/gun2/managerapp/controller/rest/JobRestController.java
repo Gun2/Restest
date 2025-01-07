@@ -32,7 +32,7 @@ public class JobRestController {
     }
 
     @GetMapping(path = "/v1/jobs/{id}")
-    public ResponseEntity<SuccessResponse<JobDto>> findById(@PathVariable Long id){
+    public ResponseEntity<SuccessResponse<JobDto>> findById(@PathVariable("id") Long id){
         JobDto jobDto = jobService.findById(id);
         return new SuccessResponse(jobDto).toResponseEntity(SuccessCode.OK);
     }
@@ -52,7 +52,7 @@ public class JobRestController {
     }
 
     @DeleteMapping(path = "/v1/jobs/{id}")
-    public ResponseEntity<SuccessResponse<Void>> delete(@PathVariable Long id){
+    public ResponseEntity<SuccessResponse<Void>> delete(@PathVariable("id") Long id){
         jobService.delete(id);
         jobChangeDataSpreader.delete(id);
         return new SuccessResponse(null).toResponseEntity(SuccessCode.OK);
