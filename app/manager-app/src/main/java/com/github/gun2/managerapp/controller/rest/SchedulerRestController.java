@@ -39,6 +39,16 @@ public class SchedulerRestController {
         sendingOperations.convertAndSend("/scheduler/init", schedulerStateDtoList);
     }
 
+    public ResponseEntity<SuccessResponse<List<SchedulerStateDto>>> findAll(){
+        //TODO: 서비스 레이어로 옮기기
+        List<SchedulerStateDto> schedulerStateDtoList =  schedulerComponent
+                .getSchedulerInfoMap()
+                .values()
+                .stream()
+                .map(info -> SchedulerStateDto.of(info)).toList();
+        return SuccessResponse.of(schedulerStateDtoList).toResponseEntity(SuccessCode.OK);
+    }
+
     public void deleteScheduleInfo(Long id){
         sendingOperations.convertAndSend("/scheduler/delete", id);
     }
