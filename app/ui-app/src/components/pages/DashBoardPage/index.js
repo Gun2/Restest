@@ -1,36 +1,43 @@
-import React from 'react';
-import { MdCheckCircle, MdError, MdGroup } from 'react-icons/md';
+import React, {useEffect} from 'react';
+import {MdCheckCircle, MdError, MdGroup} from 'react-icons/md';
 import styled, {css} from 'styled-components';
 import ImageTitleCard from '../../molecules/ImageTitleCard';
 import DashBoardTeemplate from '../../templates/DashBoardTemplate';
-import {useSelector} from "react-redux";
+import {useReadFailureCountQuery, useReadSuccessCountQuery, useReadUserQuery} from '../../../modules/sysInfo';
+import {useStompClient} from "hooks/useStompClient";
 
 const Box = styled.div`
 
 `;
 function DashBoardPage({theme}) {
-    const userCount = useSelector(state => state.sysInfo.user);
-    const successCount = useSelector(state => state.sysInfo.success);
-    const failureCount = useSelector(state => state.sysInfo.failure);
+    const client = useStompClient();
+    const {data: userSysInfoData, ...useReadUserQueryResult} = useReadUserQuery();
+    const {data: successSysInfoData, ...useReadSuccessCountQueryResult} = useReadSuccessCountQuery();
+    const {data: failureSysInfoData, ...useReadFailureCountQueryResult} = useReadFailureCountQuery();
+    useEffect(() => {
+        useReadUserQueryResult.refetch();
+        useReadSuccessCountQueryResult.refetch();
+        useReadFailureCountQueryResult.refetch();
+    }, [client]);
     return (
         <Box>
             <DashBoardTeemplate
                 topLeft={<ImageTitleCard 
-                    text={userCount}
+                    text={userSysInfoData?.data || 0}
                     bgColor={css`${({theme})=>theme.palette.status.default}`}
                     image={<MdGroup 
                         size={100}
                         />}
                 />}
                 topCenter={<ImageTitleCard 
-                    text={successCount}
+                    text={successSysInfoData?.data || 0}
                     bgColor={css`${({theme})=>theme.palette.status.success}`}
                     image={<MdCheckCircle 
                         size={100}
                     />}
                 />}
                 topRight={<ImageTitleCard 
-                    text={failureCount}
+                    text={failureSysInfoData?.data || 0}
                     bgColor={css`${({theme})=>theme.palette.status.failure}`}
                     image={<MdError 
                         size={100}

@@ -15,14 +15,13 @@ const Font = styled.p`
     text-align: left;
 `
 
-function ValidationMessage({field, validationGroup, children, style, hide}) {
-    const validationSelector = useSelector(store => store.validationMessage[validationGroup]) ?? undefined;
+function ValidationMessage({field, validationGroup, children, style, hide, validationErrors}) {
     const matchedErrors = useMemo(() => {
-        if(!validationSelector){
+        if(!validationErrors){
             return [];
         }
-        return validationSelector.errors?.filter(fieldError => fieldError.field === field)
-    }, [validationSelector, field]);
+        return validationErrors.filter(fieldError => fieldError.field === field)
+    }, [validationErrors, field]);
     return (
         <div style={style}>
             {

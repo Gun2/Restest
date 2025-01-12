@@ -1,13 +1,14 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import Title from "../../atoms/Title";
 import CloseIcon from '@mui/icons-material/Close';
 import MinimizeIcon from '@mui/icons-material/Minimize';
 import FitScreenIcon from '@mui/icons-material/FitScreen';
 import {useDispatch, useSelector} from "react-redux";
-import {hideDialogAction} from "../../../modules/dialog";
+import {hide} from "../../../modules/dialog";
 import Button from "../../atoms/Button";
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import useScroll from "hooks/useScroll";
 
 const Background = styled.div`
     ${({theme}) => theme.flex.center};
@@ -109,7 +110,7 @@ const DraggableDialog = ({children, title, id='', startPoint = {x:0,y:0}}) => {
     const showDialog = useSelector(store => store.dialog[id]);
 
     const hideDialog = useCallback(() => {
-        dispatch(hideDialogAction(id));
+        dispatch(hide(id));
     }, [id]);
 
     const toggleContent = useCallback(() => {
@@ -153,14 +154,14 @@ const DraggableDialog = ({children, title, id='', startPoint = {x:0,y:0}}) => {
                                 </ControlItem>
                             </ControlContain>
                         </Head>
-                            <ScrollBody>
-                                {
-                                    viewContent &&
-                                    <BodyInner>
-                                        {children}
-                                    </BodyInner>
-                                }
-                            </ScrollBody>
+                        <ScrollBody>
+                            {
+                                viewContent &&
+                                <BodyInner>
+                                    {children}
+                                </BodyInner>
+                            }
+                        </ScrollBody>
 
 
                     </Dialog>
@@ -180,22 +181,27 @@ const DraggableDialog = ({children, title, id='', startPoint = {x:0,y:0}}) => {
 
 const ScrollBody = ({children}) => {
     const [scrollBottom, setScrollBottom] = useState(true);
-    const ref = useRef();
+    const [scrollRef, event] = useScroll();
     useEffect(() => {
+        if (event){
+            handleScroll(event);
+        }
+    }, [event]);
+    /*useEffect(() => {
         ref.current.addEventListener('scroll', handleScroll);
         return () => {
             ref.current?.removeEventListener('scroll', handleScroll);
         };
-    }, [children]);
+    }, [children]);*/
     useEffect(() => {
         if(scrollBottom){
             scrollToBottom();
         }
-    });
+    }, [scrollBottom, children]);
     const scrollToBottom = useCallback(() => {
-        ref.current.scrollTo(0, ref.current.scrollHeight);
+        scrollRef.current.scrollTo(0, scrollRef.current.scrollHeight);
         setScrollBottom(true);
-    }, [ref]);
+    }, [scrollRef]);
 
     const handleScroll = useCallback(({target}) => {
         if(target.scrollHeight <= target.clientHeight + target.scrollTop + 5){
@@ -207,7 +213,7 @@ const ScrollBody = ({children}) => {
 
     return(
 
-        <Body ref={ref}>
+        <Body ref={scrollRef}>
             {
                 children &&
                 <>

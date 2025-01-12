@@ -6,9 +6,8 @@ import axios from "axios";
 import StatusLabel from "../../atoms/StatusLabel";
 import theme from "../../../theme";
 import OpenRow from "../OpenRow";
-import {failureLogDialogThunk} from "../../../modules/schedulerFailureLog";
 import {useDispatch} from "react-redux";
-import {successLogDialogThunk} from "../../../modules/schedulerSuccessLog";
+import {useRunMutation} from "modules/schedule";
 
 const initData = {
     title: "",
@@ -17,15 +16,19 @@ const initData = {
 }
 
 
-function ScheduleRow({
-                         title,
-                         data,
-                         schedulerStateInfo,
-                         onSaveCallback,
-                         onDeleteCallback,
-                         _key,
-                     }) {
+function ScheduleRow(
+    {
+        title,
+        data,
+        schedulerStateInfo,
+        onSaveCallback,
+        onDeleteCallback,
+        onClickSuccessIcon,
+        onClickFailureIcon,
+        _key,
+    }) {
     const dispatch = useDispatch();
+    const [runTrigger] = useRunMutation();
     return (
         <OpenRow
             head={
@@ -43,14 +46,14 @@ function ScheduleRow({
                                 status={"success"}
                                 label={schedulerStateInfo.success}
                                 onClick={() => {
-                                    dispatch(successLogDialogThunk({id:data.id}));
+                                    onClickSuccessIcon && onClickSuccessIcon();
                                 }}
                             />
                             <StatusLabel
                                 status={"failure"}
                                 label={schedulerStateInfo.failure}
                                 onClick={() => {
-                                    dispatch(failureLogDialogThunk({id:data.id}));
+                                    onClickFailureIcon && onClickFailureIcon();
                                 }}
                             />
                         </>
@@ -60,7 +63,7 @@ function ScheduleRow({
                     <Switch
                         checked={schedulerStateInfo != null}
                         onChange={({checked}) => {
-                            axios.put('/api/v1/schedules/run', {
+                            runTrigger({
                                 id: _key,
                                 run: checked
                             }).then(r => {

@@ -5,11 +5,9 @@ import Select from "../../atoms/Select";
 import Button from "../../atoms/Button";
 import IncreaseTable from "../../atoms/IncreaseTable";
 import TabBar from "../TabBar";
-import axios from "axios";
 import ValidationMessage from "../../atoms/ValidationMessage";
-import {jobCreateThunk, jobDeleteThunk, jobReadAllThunk, jobUpdateThunk} from "../../../modules/job";
-import {useDispatch, useSelector} from "react-redux";
-import store from "../../../store";
+import {useCreateMutation, useDeleteByIdMutation, useUpdateMutation} from "../../../modules/job.ts";
+import {useDetectValidationError} from "../../../hooks/useDetectValidationError";
 
 const Box = styled.div`
     display: flex;
@@ -74,26 +72,22 @@ function JobContent({
                         showTestBtn,
                         readonly
                     }) {
-    const successCallback = () => {
-        onSaveCallback();
-        //dispatch(jobReadAllThunk({}));
-    }
+    const [createJob, {data : createJobData}] = useCreateMutation();
+    const [updateJob, {data: updateJobData}] = useUpdateMutation();
+    const [deleteJobById] = useDeleteByIdMutation();
     const [jobData, jobDispatch] = useReducer(jobReducer, data);
-    const validationGroup = `jobValidation-${jobData.id}`;
-    const dispatch = useDispatch();
-    const onSave = useCallback(() => {
-        if (jobData.id) {
-            dispatch(jobUpdateThunk({
-                param : jobData,
-                validationGroup : validationGroup,
-                successCallback : () => {successCallback()},
-            }));
-        } else {
-            dispatch(jobCreateThunk({
-                param : jobData,
-                validationGroup : validationGroup,
-                successCallback : () => {successCallback()}
-            }));
+    const detectValidationError = useDetectValidationError({validationGroup: "jobValidation"});
+    const onSave = useCallback(async () => {
+        try {
+            if (jobData.id) {
+                await updateJob(jobData).unwrap();
+            } else {
+                await createJob(jobData).unwrap();
+            }
+            detectValidationError.bindResponse(undefined);
+            onSaveCallback();
+        }catch (e){
+            detectValidationError.bindResponse(e?.data);
         }
     }, [jobData]);
 
@@ -107,17 +101,13 @@ function JobContent({
     }, [jobData]);
 
     const onDelete = useCallback(() => {
-        dispatch(jobDeleteThunk({
-            param: jobData.id,
-            validationGroup : validationGroup,
-            successCallback : () => {onDeleteCallback()}
-        }));
+        deleteJobById(jobData.id);
     }, [jobData])
     return (
         <Box>
             {
                 !readonly &&
-                <ValidationMessage field={"title"} validationGroup={validationGroup}>
+                <ValidationMessage field={"title"} {...detectValidationError}>
                     <InputText onChange={
                         (value) => onChange({
                             type: "CHANGE",
@@ -130,7 +120,7 @@ function JobContent({
                 </ValidationMessage>
             }
             <UrlContain>
-                <ValidationMessage field={"method"} validationGroup={validationGroup}>
+                <ValidationMessage field={"method"} {...detectValidationError}>
                     <Select value={jobData.method}
                             onChange={
                                 (value) => onChange({
@@ -146,7 +136,7 @@ function JobContent({
                         <option value={"DELETE"}>DELETE</option>
                     </Select>
                 </ValidationMessage>
-                <ValidationMessage style={{flex:"1"}} field={"url"} validationGroup={validationGroup}>
+                <ValidationMessage style={{flex:"1"}} field={"url"}  {...detectValidationError}>
                     <InputText onChange={
                         (value) => onChange({
                             type: "CHANGE",

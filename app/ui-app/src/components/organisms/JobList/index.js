@@ -1,8 +1,7 @@
-import React, {useEffect, useMemo, useReducer, useState} from 'react';
+import React from 'react';
 import styled from "styled-components";
-import axios from "axios";
 import JobRow from "../../molecules/JobRow";
-import JobContent from "../../molecules/JobContent";
+import {useReadAllQuery} from "../../../modules/job.ts";
 
 const Box = styled.div`
 `
@@ -15,8 +14,6 @@ const List = styled.div`
 
 
 function JobList({
-                     data,
-                     getData,
                      onCheckCallback = () => {
                      },
                      checkedIdSet: checkedIdSet = new Set(),
@@ -24,12 +21,13 @@ function JobList({
                      readonly
                  },
 ) {
+    const {data, error, isLoading, refetch} = useReadAllQuery();
 
     return (
         <Box>
             <List>
                 {
-                    data.map((d, i) => {
+                    data && data.data.map((d, i) => {
                         return (
                             <JobRow
                                 hideCheckBox={hideCheckBox}
@@ -37,10 +35,10 @@ function JobList({
                                 title={d.title}
                                 data={d}
                                 onSaveCallback={() => {
-                                    getData();
+                                    refetch();
                                 }}
                                 onDeleteCallback={() => {
-                                    getData();
+                                    refetch();
                                 }}
                                 key={d.id}
                                 _key={d.id}

@@ -1,10 +1,8 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import Button from '../components/atoms/Button';
-import {SocketContext} from "../App";
 import SchedulePage from "../components/pages/SchedulePage";
 
 function Test(props) {
-    console.log(useContext(SocketContext));
     return (
         <div>
             <Button form='primary'>

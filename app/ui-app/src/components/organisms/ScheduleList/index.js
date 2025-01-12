@@ -1,8 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
-import JobRow from "../../molecules/JobRow";
 import ScheduleRow from "../../molecules/ScheduleRow";
-import {useSelector} from "react-redux";
+import {useScheduleSuccessDialog} from "../../../hooks/useScheduleSuccessDialog.ts";
+import {useReadAllQuery as useReadAllScheduleQuery} from "../../../modules/schedule";
+import {useReadAllQuery as useReadAllJobQuery} from "../../../modules/job";
+import {useScheduleFailureDialog} from "../../../hooks/useScheduleFailureDialog.ts";
+import {useFindAllQuery} from "modules/scheduler";
 
 const Box = styled.div`
     
@@ -11,32 +14,39 @@ const List = styled.div`
     display: flex;
     flex-direction : column;
     gap:5px;
-    padding 10px;
+    padding: 10px;
 `
 
-function ScheduleList({
-                          data,
-                          getData,
-                      }) {
-    const schedulerStateInfoList = useSelector(state => state.scheduler);
-
+function ScheduleList(
+    {
+    }
+) {
+    const useFindAllSchedulerResult = useFindAllQuery();
+    const {data: scheduleData = [], ...readAllScheduleQuery} = useReadAllScheduleQuery();
+    const {data: jobData = [], ...readAllJobQuery} = useReadAllJobQuery();
+    const {showModal : showModalOfSuccessDialog, hideModal : hideModalOfSuccessDialog} = useScheduleSuccessDialog();
+    const {showModal : showModalOfFailureDialog, hideModal : hideModalOfFailureDialog} = useScheduleFailureDialog();
     return (
         <Box>
             <List>
                 {
-                    data.map((d,i) => {
-                        const schedulerStateInfo = schedulerStateInfoList.find(s => s.id == d.id);
+                    scheduleData?.data?.map((d,i) => {
+                        const schedulerStateInfo = useFindAllSchedulerResult?.data?.data ? useFindAllSchedulerResult?.data?.data.find(s => s.id == d.id) : null;
                         return (
                             <ScheduleRow
                                 title={d.title}
                                 schedulerStateInfo={schedulerStateInfo}
                                 data={d}
                                 onSaveCallback={() => {
-                                    getData();
+                                    readAllScheduleQuery.refetch();
+                                    readAllJobQuery.refetch();
                                 }}
                                 onDeleteCallback={() => {
-                                    getData();
+                                    readAllScheduleQuery.refetch();
+                                    readAllJobQuery.refetch();
                                 }}
+                                onClickSuccessIcon={() => showModalOfSuccessDialog(d.id)}
+                                onClickFailureIcon={() => showModalOfFailureDialog(d.id)}
                                 key={d.id}
                                 _key={d.id}
                             />

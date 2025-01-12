@@ -22,45 +22,42 @@ function JobRow({
                     readonly,
                     labelColor="#f00",
                 }) {
-    const [viewBody, setViewBody] = useState(false);
-    const onToggle = useCallback((flag) => {
-        setViewBody(flag != 1);
-    }, [viewBody]);
-
     return (
         <OpenRow
-            head={<>
-                {
-                    !hideCheckBox &&
-                    <CheckBox
-                        onChange={(e) => {
-                            onCheckCallback(e, _key);
-                        }}
-                        checked={checkSet.has(_key)}
+            head={
+                <>
+                    {
+                        !hideCheckBox &&
+                        <CheckBox
+                            onChange={(e) => {
+                                onCheckCallback(e, _key);
+                            }}
+                            checked={checkSet.has(_key)}
 
-                    />
-                }
-                <RectDiv>
-                    <Rect color={data.color} width={7} height={25}/>
-                </RectDiv>
-                <Title color={"#e4e4e4"}>
-                    {title}
-                </Title>
-            </>}
-            content={<JobContent
-                data={data}
-                showDeleteBtn
-                showSaveBtn
-                onSaveCallback={() => {
-                    onToggle();
-                    onSaveCallback();
-                }}
-                onDeleteCallback={() => {
-                    onToggle();
-                    onDeleteCallback();
-                }}
-                readonly={readonly}
-            />}
+                        />
+                    }
+                    <RectDiv>
+                        <Rect color={data.color} width={7} height={25}/>
+                    </RectDiv>
+                    <Title color={"#e4e4e4"}>
+                        {title}
+                    </Title>
+                </>
+            }
+            content={
+                <JobContent
+                    data={data}
+                    showDeleteBtn
+                    showSaveBtn
+                    onSaveCallback={() => {
+                        onSaveCallback();
+                    }}
+                    onDeleteCallback={() => {
+                        onDeleteCallback();
+                    }}
+                    readonly={readonly}
+                />
+            }
         />
     );
 }

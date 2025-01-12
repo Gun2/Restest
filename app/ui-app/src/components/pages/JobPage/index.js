@@ -1,23 +1,13 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React from 'react';
 import JobTemplate from "../../templates/JobTemplate";
 import JobTop from "../../organisms/JobTop";
 import JobList from "../../organisms/JobList";
-import axios from "axios";
-import {useDispatch, useSelector} from "react-redux";
-import store from "../../../store";
-import {jobReadAllThunk} from "../../../modules/job";
+import {useReadAllQuery} from "../../../modules/job.ts";
 
 function JobPage() {
-    const dispatch = useDispatch();
-    const data = useSelector(store => store.job);
-    const getData = () => {
-        dispatch(jobReadAllThunk({}));
-    }
-    useEffect(() => {
-        getData();
-    }, []);
+    const {data, error, isLoading, refetch} = useReadAllQuery();
     const onSaveCallback = () => {
-        getData();
+        refetch();
     }
     return (
         <JobTemplate
@@ -28,8 +18,6 @@ function JobPage() {
             }
             list={
                 <JobList
-                    data={data}
-                    getData={getData}
                     hideCheckBox
                 />
             }

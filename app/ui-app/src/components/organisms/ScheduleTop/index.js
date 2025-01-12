@@ -1,8 +1,8 @@
 import React, {useCallback, useState} from 'react';
 import styled from "styled-components";
 import Button from "../../atoms/Button";
-import JobContent from "../../molecules/JobContent";
 import ScheduleContent from "../../molecules/ScheduleContent";
+import {useReadAllQuery} from "modules/schedule";
 
 const Box = styled.div`
     display: flex;
@@ -21,7 +21,7 @@ const CreateBox = styled.div`
 
 
 function ScheduleTop() {
-
+    const useReadAllQueryResult = useReadAllQuery();
     const [viewCreator, setViewCreator] = useState(false);
     const onAdd = useCallback(() => {
         setViewCreator(true);
@@ -51,6 +51,7 @@ function ScheduleTop() {
                         showCancelBtn
                         onSaveCallback={() => {
                             setViewCreator(false);
+                            useReadAllQueryResult.refetch();
                         }}
                         onCancelCallback={() => {
                             setViewCreator(false);

@@ -1,21 +1,19 @@
-import React, {useCallback, useEffect, useReducer, useState} from 'react';
+import React, {useCallback, useReducer} from 'react';
 import styled from "styled-components";
 import InputText from "../../atoms/InputText";
-import Select from "../../atoms/Select";
 import Button from "../../atoms/Button";
-import IncreaseTable from "../../atoms/IncreaseTable";
-import TabBar from "../TabBar";
 import axios from "axios";
 import JobList from "../../organisms/JobList";
 import {useDispatch, useSelector} from "react-redux";
-import {scheduleCreateThunk, scheduleUpdateThunk} from "../../../modules/schedule";
+import {useCreateMutation, useDeleteByIdMutation, useUpdateMutation} from "modules/schedule";
 import ValidationMessage from "../../atoms/ValidationMessage";
+import {useDetectValidationError} from "hooks/useDetectValidationError";
 
 const Box = styled.div`
     display: flex;
     flex-direction : column;
     gap:5px;
-    padding 10px;
+    padding: 10px;
 `;
 
 const Bottom = styled.div`
@@ -77,22 +75,21 @@ function ScheduleContent({
                          }) {
     const jobData = useSelector(store => store.job);
     const [scheduleData, scheduleDispatch] = useReducer(reducer, data);
-    const dispatch = useDispatch();
-    const validationGroup = `scheduleValidation-${data.id}`;
-    const onSave = useCallback(() => {
-        if (scheduleData.id) {
-            dispatch(scheduleUpdateThunk({
-                param : scheduleData,
-                validationGroup : validationGroup,
-                successCallback : onSaveCallback,
-            }));
-
-        } else {
-            dispatch(scheduleCreateThunk({
-                param : scheduleData,
-                validationGroup : validationGroup,
-                successCallback : onSaveCallback,
-            }));
+    const detectValidationError = useDetectValidationError({validationGroup: "scheduleValidation"});
+    const [updateSchedule] = useUpdateMutation();
+    const [createSchedule] = useCreateMutation();
+    const [deleteScheduleById] = useDeleteByIdMutation();
+    const onSave = useCallback(async () => {
+        try {
+            if (scheduleData.id) {
+                await updateSchedule(scheduleData).unwrap();
+            } else {
+                await createSchedule(scheduleData).unwrap();
+            }
+            detectValidationError.bindResponse(undefined);
+            onSaveCallback();
+        }catch (e){
+            detectValidationError.bindResponse(e?.data)
         }
     }, [scheduleData]);
 
@@ -105,16 +102,14 @@ function ScheduleContent({
     }, [scheduleData]);
 
     const onDelete = useCallback(() => {
-        axios.delete(`/api/v1/schedules/${scheduleData.id}`).then(
-            () => {
-                onDeleteCallback()
-            }
-        )
+        deleteScheduleById(scheduleData.id).then(data => {
+            onDeleteCallback();
+        });
     }, [scheduleData])
     return (
         <Box>
             <ColContain>
-                <ValidationMessage field={"title"} validationGroup={validationGroup}>
+                <ValidationMessage field={"title"} {...detectValidationError}>
                     <InputText onChange={
                         (value) => onChange({
                             type: "CHANGE",
@@ -126,7 +121,7 @@ function ScheduleContent({
                                placeholder={"스케줄 제목을 입력하세요."}
                     />
                 </ValidationMessage>
-                <ValidationMessage field={"delay"} validationGroup={validationGroup}>
+                <ValidationMessage field={"delay"} {...detectValidationError}>
                     <InputText onChange={
                         (value) => onChange({
                             type: "CHANGE",
