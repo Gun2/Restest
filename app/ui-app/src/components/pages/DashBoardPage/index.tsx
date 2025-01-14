@@ -1,15 +1,16 @@
 import React, {useEffect} from 'react';
 import {MdCheckCircle, MdError, MdGroup} from 'react-icons/md';
-import styled, {css} from 'styled-components';
+import styled, {css, useTheme} from 'styled-components';
 import ImageTitleCard from '../../molecules/ImageTitleCard';
-import DashBoardTeemplate from '../../templates/DashBoardTemplate';
+import DashBoardTemplate from '../../templates/DashBoardTemplate';
 import {useReadFailureCountQuery, useReadSuccessCountQuery, useReadUserQuery} from '../../../modules/sysInfo';
 import {useStompClient} from "hooks/useStompClient";
+import {AppTheme} from "../../../theme";
 
 const Box = styled.div`
 
 `;
-function DashBoardPage({theme}) {
+function DashBoardPage() {
     const client = useStompClient();
     const {data: userSysInfoData, ...useReadUserQueryResult} = useReadUserQuery();
     const {data: successSysInfoData, ...useReadSuccessCountQueryResult} = useReadSuccessCountQuery();
@@ -19,26 +20,27 @@ function DashBoardPage({theme}) {
         useReadSuccessCountQueryResult.refetch();
         useReadFailureCountQueryResult.refetch();
     }, [client]);
+    const theme : AppTheme = useTheme();
     return (
         <Box>
-            <DashBoardTeemplate
+            <DashBoardTemplate
                 topLeft={<ImageTitleCard 
                     text={userSysInfoData?.data || 0}
-                    bgColor={css`${({theme})=>theme.palette.status.default}`}
+                    bgColor={theme.palette.status.default}
                     image={<MdGroup 
                         size={100}
                         />}
                 />}
                 topCenter={<ImageTitleCard 
                     text={successSysInfoData?.data || 0}
-                    bgColor={css`${({theme})=>theme.palette.status.success}`}
+                    bgColor={theme.palette.status.success}
                     image={<MdCheckCircle 
                         size={100}
                     />}
                 />}
                 topRight={<ImageTitleCard 
                     text={failureSysInfoData?.data || 0}
-                    bgColor={css`${({theme})=>theme.palette.status.failure}`}
+                    bgColor={theme.palette.status.failure}
                     image={<MdError 
                         size={100}
                         />}

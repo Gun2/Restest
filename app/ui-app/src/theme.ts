@@ -1,4 +1,4 @@
-import {css} from 'styled-components';
+import {css, FlattenSimpleInterpolation} from 'styled-components';
 
 const colorAdd = (() => {
     const hexToDec = (hex : string) => {
@@ -77,14 +77,14 @@ const palette = {
     shadow: "#000000aa",
 };
 
-const style = {
+const style : Record<string, FlattenSimpleInterpolation> = {
     readonly : css`
         pointer-events:none;
         background-color : ${palette.disabled}; 
     `
 }
 
-const flex = {
+const flex : Record<string, FlattenSimpleInterpolation> = {
     startCenter : css`
         display: flex;
         align-items: center;
@@ -106,8 +106,8 @@ const flex = {
         justify-content: space-around;
     `,
     middle : css`
-    display: flex;
-    align-items: center;
+        display: flex;
+        align-items: center;
     `,
 }
 
@@ -163,3 +163,5 @@ const theme = {
     backgroundCover
 };
 export default theme;
+
+export type AppTheme = typeof theme;

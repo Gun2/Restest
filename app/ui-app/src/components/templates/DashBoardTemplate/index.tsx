@@ -7,7 +7,17 @@ const Box = styled.div`
     flex-wrap: wrap;
 `;
 
-function DashBoardTeemplate({topLeft, topCenter, topRight}) {
+type DashBoardTemplateProps = {
+    topLeft: React.ReactNode,
+    topCenter: React.ReactNode,
+    topRight: React.ReactNode
+}
+
+function DashBoardTemplate(
+    {
+        topLeft, topCenter, topRight
+    }: DashBoardTemplateProps
+) {
     return (
         <Box>
             <div>
@@ -23,4 +33,4 @@ function DashBoardTeemplate({topLeft, topCenter, topRight}) {
     );
 }
 
-export default DashBoardTeemplate;
+export default DashBoardTemplate;
