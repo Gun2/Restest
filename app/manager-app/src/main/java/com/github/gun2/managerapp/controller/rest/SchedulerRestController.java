@@ -39,6 +39,7 @@ public class SchedulerRestController {
         sendingOperations.convertAndSend("/scheduler/init", schedulerStateDtoList);
     }
 
+    @GetMapping("/v1/schedulers")
     public ResponseEntity<SuccessResponse<List<SchedulerStateDto>>> findAll(){
         //TODO: 서비스 레이어로 옮기기
         List<SchedulerStateDto> schedulerStateDtoList =  schedulerComponent
