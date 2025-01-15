@@ -1,6 +1,6 @@
-import {JobParam} from "./jobParam.types";
-import {JobHeader} from "./jobHeader.types";
-import {JobBody} from "./jobBody.types";
+import {JobParam, JobParamCreateOrUpdateRequest} from "./jobParam.types";
+import {JobHeader, JobHeaderCreateOrUpdateRequest} from "./jobHeader.types";
+import {JobBody, JobBodyCreateOrUpdateRequest} from "./jobBody.types";
 import {LocalDateTime} from "./global.types";
 
 export type Job = {
@@ -20,4 +20,12 @@ export type Method =
     "GET" |
     "POST" |
     "PUT" |
-    "DELETE"
+    "DELETE";
+
+export type JobCreateOrUpdateRequest = Pick<Job, "title" | "method" | "url">& {
+    id?: Job["id"];
+    color?: string;
+    jobParamList: Array<JobParamCreateOrUpdateRequest>;
+    jobHeaderList: Array<JobHeaderCreateOrUpdateRequest>;
+    jobBodyList: Array<JobBodyCreateOrUpdateRequest>;
+}

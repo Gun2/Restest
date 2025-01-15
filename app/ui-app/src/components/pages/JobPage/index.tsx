@@ -1,8 +1,8 @@
 import React from 'react';
-import JobTemplate from "../../templates/JobTemplate";
-import JobTop from "../../organisms/JobTop";
-import JobList from "../../organisms/JobList";
-import {useReadAllQuery} from "../../../modules/job.ts";
+import JobTemplate from "components/templates/JobTemplate";
+import JobTop from "components/organisms/JobTop";
+import JobList from "components/organisms/JobList";
+import {useReadAllQuery} from "modules/job";
 
 function JobPage() {
     const {data, error, isLoading, refetch} = useReadAllQuery();

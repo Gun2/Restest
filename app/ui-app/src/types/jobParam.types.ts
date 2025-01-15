@@ -12,3 +12,8 @@ export type JobParam = {
     usable: boolean
 
 }
+
+export type JobParamCreateOrUpdateRequest = Pick<JobParam, "keyName" | "value" | "description" | "usable"> & {
+    id?: JobParam["id"];
+    jobId?: Job["id"];
+}

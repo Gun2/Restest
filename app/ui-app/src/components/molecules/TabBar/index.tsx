@@ -15,9 +15,24 @@ const Content = styled.div`
 
 `
 
-function TabBar({tabData = []}) {
-    const [activeTab , setActiveTab] = useState(0);
-    const onTab = useCallback((key) => {
+type TabData = {
+    // 탭의 이름
+    key: string;
+    // 탭 클릭 시 표시될 내용
+    content: React.ReactNode;
+};
+
+type TabBarProps = {
+    tabData: Array<TabData>;
+}
+
+function TabBar(
+    {
+        tabData = []
+    }: TabBarProps
+) {
+    const [activeTab , setActiveTab] = useState<number>(0);
+    const onTab = useCallback((key: number) => {
         setActiveTab(key);
     }, []);
 

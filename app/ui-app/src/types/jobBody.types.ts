@@ -10,3 +10,8 @@ export type JobBody = {
     updateAt: LocalDateTime
     usable: boolean
 }
+
+export type JobBodyCreateOrUpdateRequest = Pick<JobBody, "body" | "afterDelay" | "usable"> & {
+    id?: JobBody["id"];
+    jobId?: Job["id"];
+}

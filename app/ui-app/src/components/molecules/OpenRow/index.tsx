@@ -12,10 +12,6 @@ const Box = styled.div`
     flex-direction : column;
     padding : 5px;
     gap:5px;
-    ${
-    ({theme, hasUpdate}) => hasUpdate && css`
-        background-color : ${theme.colorAdd(theme.palette.panel, 50)}
-    `
 }   
 `;
 
@@ -37,14 +33,24 @@ const RowTail = styled.div`
 const HiddenRow = styled.div`
 
 `
-
-function OpenRow({head, content, tail}) {
+type OpenRowProps = {
+    head?: React.ReactNode;
+    content?: React.ReactNode;
+    tail?: React.ReactNode;
+}
+function OpenRow(
+    {
+        head,
+        content,
+        tail
+    }: OpenRowProps
+) {
     const [viewBody, setViewBody] = useState(false);
-    const onToggle = useCallback((flag) => {
+    const onToggle = useCallback((flag : number) => {
         setViewBody(flag != 1);
     }, [viewBody]);
     return (
-        <Box>
+        <Box >
             <Row>
                 <RowHead>
                     {head}

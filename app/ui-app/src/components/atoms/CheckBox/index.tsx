@@ -1,10 +1,18 @@
-import React from 'react';
+import React, {ChangeEventHandler} from 'react';
 import styled from "styled-components";
 
 const CheckInput = styled.input`
 `
-
-function CheckBox({onChange, checked}) {
+type CheckBoxProps = {
+    onChange?: ChangeEventHandler<HTMLInputElement>;
+    checked?: boolean
+}
+function CheckBox(
+    {
+        onChange,
+        checked
+    }: CheckBoxProps
+) {
     return (
         <CheckInput
             type={"checkbox"}

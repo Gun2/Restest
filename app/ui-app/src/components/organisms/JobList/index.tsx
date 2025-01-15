@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from "styled-components";
-import JobRow from "../../molecules/JobRow";
-import {useReadAllQuery} from "../../../modules/job.ts";
+import JobRow from "components/molecules/JobRow";
+import {useReadAllQuery} from "modules/job";
+import {Job} from "@_types/job.types";
 
 const Box = styled.div`
 `
@@ -9,17 +10,26 @@ const List = styled.div`
     display: flex;
     flex-direction : column;
     gap:5px;
-    padding 10px;
+    padding: 10px;
 `
 
-
-function JobList({
-                     onCheckCallback = () => {
-                     },
-                     checkedIdSet: checkedIdSet = new Set(),
-                     hideCheckBox,
-                     readonly
-                 },
+type JobListProps = {
+    //job 리스트 체크 시 callback
+    onCheckCallback?: (checkedIdSet: Set<number>) => void;
+    //체크된 job의 id
+    checkedIdSet?: Set<Job["id"]>;
+    //체크박스 숨김
+    hideCheckBox?: boolean;
+    //읽기모드
+    readonly?: boolean
+}
+function JobList(
+    {
+        onCheckCallback = () => {},
+        checkedIdSet = new Set(),
+        hideCheckBox,
+        readonly
+    }: JobListProps,
 ) {
     const {data, error, isLoading, refetch} = useReadAllQuery();
 
@@ -44,7 +54,7 @@ function JobList({
                                 _key={d.id}
                                 onCheckCallback={(e, key) => {
                                     const checked = e.target.checked;
-                                    var nextSet = new Set([...checkedIdSet]);
+                                    var nextSet = new Set(checkedIdSet);
                                     if (checked) {
                                         nextSet.add(key);
                                     } else {

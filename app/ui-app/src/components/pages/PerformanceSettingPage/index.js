@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import styled from "styled-components";
 import PerformanceSettingTemplate from "components/templates/PerformanceSettingTemplate";
 import LabelInputText from "components/molecules/LabelInputText";
-import JobList from "components/organisms/JobList";
+import JobList from "../../organisms/JobList";
 import {useDispatch, useSelector} from "react-redux";
 import {useReadAllQuery} from "modules/job";
 import {

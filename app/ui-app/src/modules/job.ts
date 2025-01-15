@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import {Job} from "../types/job.types";
+import {Job, JobCreateOrUpdateRequest} from "../types/job.types";
 import {SuccessResponse} from "../types/api.types";
 import {createSlice} from "@reduxjs/toolkit";
 import {subscribeWebSocket} from "./utils/streamingUpdateUtil";
@@ -10,7 +10,7 @@ export const jobApi = createApi({
     reducerPath: 'jobApi',
     baseQuery: fetchBaseQuery({ baseUrl: '/api/v1/jobs' }),
     endpoints: (builder) => ({
-        readAll: builder.query<SuccessResponse<Job[]>, Job>({
+        readAll: builder.query<SuccessResponse<Job[]>, void>({
             query: () => ``,
             async onCacheEntryAdded(
                 arg,
@@ -38,14 +38,14 @@ export const jobApi = createApi({
                 });
             },
         }),
-        update: builder.mutation<SuccessResponse<Job>, Job>({
+        update: builder.mutation<SuccessResponse<Job>, JobCreateOrUpdateRequest>({
             query: (arg) => ({
                 url: '',
                 method: "PUT",
                 body: arg
             })
         }),
-        create: builder.mutation<SuccessResponse<Job>, Job>({
+        create: builder.mutation<SuccessResponse<Job>, JobCreateOrUpdateRequest>({
             query: (arg) => ({
                 url: "",
                 method: "POST",

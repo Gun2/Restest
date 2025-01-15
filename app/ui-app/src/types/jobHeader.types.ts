@@ -10,3 +10,8 @@ export type JobHeader = {
     updateAt: Date
     usable: boolean
 }
+
+export type JobHeaderCreateOrUpdateRequest = Pick<JobHeader, "keyName" | "value" | "description" | "usable"> & {
+    id?: JobHeader["id"];
+    jobId?: Job["id"];
+}

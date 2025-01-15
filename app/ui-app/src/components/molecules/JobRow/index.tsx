@@ -1,27 +1,53 @@
-import React, {useCallback, useState, useReducer} from 'react';
-import styled, {css} from "styled-components";
-import DirectionToggle from "../../atoms/DirectionToggle";
+import React from 'react';
+import styled from "styled-components";
 import Title from "../../atoms/Title";
 import JobContent from "../JobContent";
 import CheckBox from "../../atoms/CheckBox";
 import Rect from "../../atoms/Rect";
 import OpenRow from "../OpenRow";
+import {Job} from "@_types/job.types";
 
 const RectDiv = styled.div`
     flex:none;
 `
-function JobRow({
-                    title,
-                    data,
-                    onSaveCallback,
-                    onDeleteCallback,
-                    onCheckCallback,
-                    _key,
-                    checkSet,
-                    hideCheckBox,
-                    readonly,
-                    labelColor="#f00",
-                }) {
+type JobRowProps = {
+    //출력할 제목
+    title: string;
+    //job 정보
+    data: Job;
+    //저장 버튼 클릭 시 callback 함수
+    onSaveCallback: () => void;
+    //삭제 버튼 클릭 시 callback 함수
+    onDeleteCallback: () => void;
+    //체크 시 callback 함수
+    onCheckCallback: (event: React.ChangeEvent<HTMLInputElement>, id: Job["id"]) => void;
+    //데이터 id
+    //TODO: _key대신 prop으로 받는 Data의 job id 값을 사용하는 방식으로 변경
+    _key: Job["id"];
+    //체크된 job의 id가 추가되어있는 set
+    checkSet: Set<number>;
+    //체크박스 숨김
+    hideCheckBox?: boolean;
+    //읽기모드
+    readonly?: boolean;
+    //라벨 색상 (hex color)
+    labelColor?: string;
+
+}
+function JobRow(
+    {
+        title,
+        data,
+        onSaveCallback,
+        onDeleteCallback,
+        onCheckCallback,
+        _key,
+        checkSet,
+        hideCheckBox,
+        readonly,
+        labelColor = "#f00",
+    } : JobRowProps
+) {
     return (
         <OpenRow
             head={
