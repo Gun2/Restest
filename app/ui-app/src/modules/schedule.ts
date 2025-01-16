@@ -16,7 +16,7 @@ export const scheduleApi = createApi({
             ) {
                 await subscribeWebSocket(api, '/change-data-spreader/schedule', message => {
                     if (message?.body){
-                        const changeData = message?.body as ChangeData<Schedule>;
+                        const changeData = JSON.parse(message?.body) as ChangeData<Schedule, Schedule["id"]>;
                         api.updateCachedData(draft => {
                             switch (changeData.type) {
                                 case "CREATE":
@@ -26,7 +26,7 @@ export const scheduleApi = createApi({
                                     draft.data = draft.data.map(schedule => schedule.id === changeData.data.id ? changeData.data : schedule);
                                     break;
                                 case "DELETE":
-                                    draft.data = draft.data.filter(schedule => schedule.id !== changeData.data.id );
+                                    draft.data = draft.data.filter(schedule => schedule.id !== changeData.data);
                                     break;
                             }
                         })

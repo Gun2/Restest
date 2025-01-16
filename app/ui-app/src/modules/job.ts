@@ -3,7 +3,7 @@ import {Job, JobCreateOrUpdateRequest} from "../types/job.types";
 import {SuccessResponse} from "../types/api.types";
 import {createSlice} from "@reduxjs/toolkit";
 import {subscribeWebSocket} from "./utils/streamingUpdateUtil";
-import {ChangeData} from "../types/changeData.types";
+import {ChangeData} from "types/changeData.types";
 
 
 export const jobApi = createApi({
@@ -18,7 +18,7 @@ export const jobApi = createApi({
             ) {
                 await subscribeWebSocket(api, '/change-data-spreader/job', message => {
                     if (message?.body){
-                        const changeData = message?.body as ChangeData<Job>;
+                        const changeData = JSON.parse(message?.body) as ChangeData<Job, Job["id"]>;
                         api.updateCachedData(draft => {
                             switch (changeData.type) {
                                 case "CREATE":
@@ -28,7 +28,7 @@ export const jobApi = createApi({
                                     draft.data = draft.data.map(job => job.id === changeData.data.id ? changeData.data : job);
                                     break;
                                 case "DELETE":
-                                    draft.data = draft.data.filter(job => job.id !== changeData.data.id );
+                                    draft.data = draft.data.filter(job => job.id !== changeData.data );
                                     break;
                             }
                         })

@@ -1,9 +1,10 @@
 /**
  * data 변경 정보
  */
-export type ChangeData<T> = {
-    type: Type
+export type ChangeData<T, K> = {
+    type: "CREATE" | "UPDATE"
     data: T,
-}
-
-type Type = "CREATE" | "UPDATE" | "DELETE"
+} | {
+    type: "DELETE",
+    data: K
+};
