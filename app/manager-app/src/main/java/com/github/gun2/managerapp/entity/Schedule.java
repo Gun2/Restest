@@ -31,7 +31,7 @@ public class Schedule {
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     @Builder
     public Schedule(Long id, String title, Integer delay, boolean run) {

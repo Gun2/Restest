@@ -9,7 +9,7 @@ export type Schedule = {
     jobIdList: Array<Job["id"]>;
     jobList: Job[];
     createdAt: string;
-    updateAt: string
+    updatedAt: string
 }
 
 export type ScheduleRequest = Pick<Schedule, "title" | "delay" | "run" | "jobList" | "jobIdList"> & {

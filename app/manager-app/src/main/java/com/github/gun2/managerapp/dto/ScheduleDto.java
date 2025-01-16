@@ -24,7 +24,7 @@ public class ScheduleDto implements Serializable {
     private List<JobDto> jobList = new ArrayList<>();
 
     private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     public ScheduleDto(Schedule schedule) {
         this.id = schedule.getId();
@@ -33,7 +33,7 @@ public class ScheduleDto implements Serializable {
         this.jobList = schedule.getScheduleJobList().stream().map(s -> new JobDto(s.getJob())).toList();
         this.jobIdList = schedule.getScheduleJobList().stream().map(s -> s.getJob().getId()).toList();
         this.createdAt = schedule.getCreatedAt();
-        this.updateAt = schedule.getUpdateAt();
+        this.updatedAt = schedule.getUpdatedAt();
         this.run = schedule.isRun();
     }
 
