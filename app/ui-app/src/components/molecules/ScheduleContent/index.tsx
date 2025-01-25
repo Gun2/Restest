@@ -4,10 +4,11 @@ import InputText from "../../atoms/InputText";
 import Button from "../../atoms/Button";
 import axios from "axios";
 import JobList from "../../organisms/JobList";
-import {useDispatch, useSelector} from "react-redux";
 import {useCreateMutation, useDeleteByIdMutation, useUpdateMutation} from "modules/schedule";
 import ValidationMessage from "../../atoms/ValidationMessage";
 import {useDetectValidationError} from "hooks/useDetectValidationError";
+import {Schedule} from "@_types/schedule.types";
+import {isFetchBaseQueryError} from "types/rtkQuery.types";
 
 const Box = styled.div`
     display: flex;
@@ -31,49 +32,79 @@ const JobBox = styled.div`
     background-color: ${({theme}) => theme.palette.secondary}
 `
 
-const initData = {
+const initData : ScheduleForm = {
     title: "",
-    delay: "1000",
+    delay: 1000,
     jobList: [],
+    jobIdList: [],
+    run: false,
 }
 
 const getJobList = () => {
     return axios.get('/api/v1/jobs');
 }
-
-const reducer = (state, {type, name, value}) => {
-    switch (type) {
+type Action = {
+    type: "INIT" | "CHANGE";
+    name: string;
+    value: any;
+} | {
+    type: "JOBS/CHANGE";
+    value: Schedule["jobIdList"];
+}
+const reducer = (state: ScheduleForm, action: Action) => {
+    switch (action.type) {
         case "INIT":
             return {...initData};
         case "CHANGE":
             return {
                 ...state,
-                [name]: value
+                [action.name]: action.value
             }
         case "JOBS/CHANGE":
             return {
                 ...state,
-                jobIdList: [...value]
+                jobIdList: [...action.value]
             }
     }
 }
 
-function ScheduleContent({
-                            data = initData,
-                             onSaveCallback = () => {
-                             },
-                             onChangeCallback = () => {
-                             },
-                             onDeleteCallback = () => {
-                             },
-                             onCancelCallback = () => {
-                             },
-                             showDeleteBtn,
-                             showSaveBtn,
-                             showCancelBtn,
-                             showTestBtn,
-                         }) {
-    const jobData = useSelector(store => store.job);
+type ScheduleForm = Omit<Schedule, "id" | "createdAt" | "updatedAt"> & {
+    id ?: Schedule["id"];
+}
+
+type ScheduleContentProps = {
+    //초기값
+    data?: ScheduleForm;
+    //저장 진행 후 callback
+    onSaveCallback?: () => void;
+    //삭제 진행 후 callback
+    onDeleteCallback?: () => void;
+    //취소 진행 후 callback
+    onCancelCallback?: () => void;
+    //삭제 버튼 표시 여부
+    showDeleteBtn?: boolean;
+    //저장 버튼 표시 여부
+    showSaveBtn?: boolean;
+    //취소 버튼 표시 여부
+    showCancelBtn?: boolean;
+
+
+}
+//스케줄 내용
+function ScheduleContent(
+    {
+        data = initData,
+        onSaveCallback = () => {
+        },
+        onDeleteCallback = () => {
+        },
+        onCancelCallback = () => {
+        },
+        showDeleteBtn,
+        showSaveBtn,
+        showCancelBtn,
+    }: ScheduleContentProps
+    ) {
     const [scheduleData, scheduleDispatch] = useReducer(reducer, data);
     const detectValidationError = useDetectValidationError({validationGroup: "scheduleValidation"});
     const [updateSchedule] = useUpdateMutation();
@@ -89,22 +120,28 @@ function ScheduleContent({
             detectValidationError.bindResponse(undefined);
             onSaveCallback();
         }catch (e){
-            detectValidationError.bindResponse(e?.data)
+            if (isFetchBaseQueryError(e)){
+                detectValidationError.bindResponse(e?.data);
+            }else {
+                console.error(e);
+            }
         }
     }, [scheduleData]);
 
     const onCancel = useCallback(() => {
         onCancelCallback();
-    });
+    }, [onCancelCallback]);
 
-    const onChange = useCallback((action) => {
+    const onChange = useCallback((action: Action) => {
         scheduleDispatch(action);
-    }, [scheduleData]);
+    }, [scheduleData, scheduleDispatch]);
 
     const onDelete = useCallback(() => {
-        deleteScheduleById(scheduleData.id).then(data => {
-            onDeleteCallback();
-        });
+        if (scheduleData.id){
+            deleteScheduleById(scheduleData.id).then(data => {
+                onDeleteCallback();
+            });
+        }
     }, [scheduleData])
     return (
         <Box>
@@ -133,17 +170,19 @@ function ScheduleContent({
                 </ValidationMessage>
             </ColContain>
             <JobBox>
-                <JobList
-                    data={jobData}
-                    checkedIdSet={new Set(scheduleData.jobIdList)}
-                    onCheckCallback={(set) => {
-                        scheduleDispatch({
-                            type:"JOBS/CHANGE",
-                            value : [...set]
-                        })
-                    }}
-                    readonly={true}
-                />
+                {
+                    <JobList
+                        checkedIdSet={new Set(scheduleData.jobIdList)}
+                        onCheckCallback={(set) => {
+                            scheduleDispatch({
+                                type:"JOBS/CHANGE",
+                                value : Array.from(set)
+                            })
+                        }}
+                        readonly={true}
+                    />
+                }
+
             </JobBox>
             <Bottom>
                 {

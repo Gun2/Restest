@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
+
 const Box = styled.div`
     margin: 20px 5px;
     display:flex;
@@ -14,7 +15,17 @@ const Top = styled.div`
 const Content = styled.div`
     
 `
-function ScheduleTemplate({top, list}) {
+
+type ScheduleTemplateProps = {
+    top: React.ReactNode;
+    list: React.ReactNode;
+}
+function ScheduleTemplate(
+    {
+        top,
+        list
+    }: ScheduleTemplateProps
+) {
     return (
         <Box>
             <Top>
