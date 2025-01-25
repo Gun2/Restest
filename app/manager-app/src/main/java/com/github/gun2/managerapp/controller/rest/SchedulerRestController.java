@@ -29,16 +29,6 @@ public class SchedulerRestController {
         this.schedulerComponent = schedulerComponent;
     }
 
-    @MessageMapping("/init")
-    public void init(String msg){
-        List<SchedulerStateDto> schedulerStateDtoList =  schedulerComponent
-                .getSchedulerInfoMap()
-                .values()
-                .stream()
-                .map(info -> SchedulerStateDto.of(info)).toList();
-        sendingOperations.convertAndSend("/scheduler/init", schedulerStateDtoList);
-    }
-
     @GetMapping("/v1/schedulers")
     public ResponseEntity<SuccessResponse<List<SchedulerStateDto>>> findAll(){
         //TODO: 서비스 레이어로 옮기기

@@ -1,11 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type {PayloadAction} from '@reduxjs/toolkit'
+import {createSlice} from '@reduxjs/toolkit'
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {SuccessResponse} from "@_types/api.types";
-import {Job} from "@_types/job.types";
-import {subscribeWebSocket} from "@_modules/utils/streamingUpdateUtil";
-import {ChangeData} from "@_types/changeData.types";
-import {SchedulerInfo, SchedulerState} from "@_types/scheduler.types";
+import {SchedulerState} from "@_types/scheduler.types";
 import {WebSocketClientFactory} from "utils/webSocketClientFactory";
 
 export type Scheduler = {
