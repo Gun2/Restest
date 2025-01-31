@@ -13,8 +13,8 @@ const Li = styled.li`
     display:flex;
 `
 
-const Title = styled.div`
-    font-size:${({titleFontSize}) => titleFontSize}px;
+const Title = styled.div<{$titleFontSize: number}>`
+    font-size:${({$titleFontSize}) => $titleFontSize}px;
     font-weight:bold;
     margin-left:10px;
     overflow: hidden;
@@ -32,20 +32,38 @@ const Bold = styled.div`
  * @param obj : Object
  * @return {boolean|boolean} 빈 값이면 ture 반환
  */
-const objectIsEmpty = (obj) => {
-    if(obj instanceof Object){
-       return Object.keys(obj).length === 0 ? true : false;
-    }else{
-        return true;
-    }
+const objectIsEmpty = (obj : Record<any, any>) => {
+    return Object.keys(obj).length === 0;
 }
-const KeyValueText = ({title, titleFontSize=18, keyValue = {}, value}) => {
+
+type KeyValueTextProps = {
+    title: string;
+    titleFontSize?: number;
+    keyValue: Record<string, string | number>;
+    value?: React.ReactNode
+}
+/**
+ * key value 형식을 리스트 형태로 출력하는 컴포넌트
+ * @param title 제목
+ * @param titleFontSize 제목 크기
+ * @param keyValue key, value 값 (key, value가 같은 행에서 문자열로 출력됨)
+ * @param value 값
+ * @constructor
+ */
+const KeyValueText = (
+    {
+        title,
+        titleFontSize=18,
+        keyValue = {},
+        value
+    }: KeyValueTextProps
+) => {
     return (
         <Box>
             {
                 (!objectIsEmpty(keyValue) || value) &&
                 <>
-                    <Title titleFontSize={titleFontSize}>
+                    <Title $titleFontSize={titleFontSize}>
                         {title}
                     </Title>
                     <Ul>

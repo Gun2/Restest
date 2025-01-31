@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
 import Rect from "../../atoms/Rect";
-import Title from "../../atoms/Title";
 import KeyValueText from "../../atoms/KeyValueText";
 
 const Box = styled.div`
@@ -24,7 +23,26 @@ const InfoBox = styled.div`
     ${({theme}) => theme.flex.startCenter};
     height: 100%;
 `
-const JobCard = ({color, title, maxTime, minTime, totalCnt, successCnt, failureCnt}) => {
+type JobCardProps = {
+    color: string;
+    title: string;
+    maxTime: number;
+    minTime: number;
+    totalCnt: number;
+    successCnt: number;
+    failureCnt: number;
+}
+const JobCard = (
+    {
+        color,
+        title,
+        maxTime,
+        minTime,
+        totalCnt,
+        successCnt,
+        failureCnt
+    }: JobCardProps
+) => {
     return (
         <Box>
             <BoxContain>

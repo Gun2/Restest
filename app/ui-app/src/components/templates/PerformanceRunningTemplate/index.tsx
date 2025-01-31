@@ -35,11 +35,21 @@ const ChartBox = styled.div`
 const ControlBox = styled.div`
      ${({theme}) => theme.flex.center};
 `
-const PerformanceSettingTemplate = ({
-                                        cardArea,
-                                        chartArea,
-                                        controlArea
-                                    }) => {
+type PerformanceSettingTemplateProps = {
+    //카드영역
+    cardArea: React.ReactNode;
+    //차트 영역
+    chartArea: React.ReactNode;
+    //제어 영역
+    controlArea: React.ReactNode;
+}
+const PerformanceSettingTemplate = (
+    {
+        cardArea,
+        chartArea,
+        controlArea
+    }: PerformanceSettingTemplateProps
+) => {
     return (
         <Box>
             <RunningContain>

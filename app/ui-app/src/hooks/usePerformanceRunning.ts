@@ -35,7 +35,7 @@ export const usePerformanceRunning = (
     const performance: PerformanceState = useSelector((state: RootState) => state.performance);
     const stompClient = useStompClient();
 
-    const init = useCallback((schedulerId: number) => {
+    const init = useCallback(() => {
         dispatch(remove());
     }, [])
 

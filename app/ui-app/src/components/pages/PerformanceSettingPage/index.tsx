@@ -1,54 +1,53 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import styled from "styled-components";
-import PerformanceSettingTemplate from "components/templates/PerformanceSettingTemplate";
+import PerformanceSettingTemplate from "../../templates/PerformanceSettingTemplate";
 import LabelInputText from "components/molecules/LabelInputText";
 import JobList from "../../organisms/JobList";
-import {useDispatch, useSelector} from "react-redux";
-import {useReadAllQuery} from "modules/job";
-import {
-    readMaxInstanceThunk,
-    readMaxJobThunk,
-    useReadMaxInstanceQuery,
-    useReadMaxJobQuery
-} from "modules/performanceSetting";
+import {useDispatch} from "react-redux";
+import {useReadMaxInstanceQuery, useReadMaxJobQuery} from "modules/performanceSetting";
 import Button from "components/atoms/Button";
 import ValidationMessage from "../../atoms/ValidationMessage";
 import {create, useCreateMutation} from "modules/performance";
+import {useDetectValidationError} from "hooks/useDetectValidationError";
+import {isFetchBaseQueryError} from "types/rtkQuery.types";
 
 const Box = styled.div`
 `;
 const PerformanceSettingPage = ({}) => {
     const dispatch = useDispatch();
-    const [checkedJobList, setCheckedJobList] = useState([]);
+    const [checkedJobList, setCheckedJobList] = useState<number[]>([]);
     const {data : { data : maxInstance} = {data : 0}} = useReadMaxInstanceQuery();
     const [instanceValue, setInstanceValue] = useState(0);
-    const validationGroup = 'performance';
+    const detectValidationError = useDetectValidationError({validationGroup: "performance"});
     const [createPerformance] = useCreateMutation();
     const {data: {data : maxJob} = {data : 0}} = useReadMaxJobQuery();
-    const {jobList = []} = useReadAllQuery();
+
     const onClickRegistryBtn = useCallback(() => {
         createPerformance({
             instance: instanceValue,
             jobIdList: checkedJobList,
         }).then(r => {
-            dispatch(create(r?.data?.data));
+            if (r.data){
+                dispatch(create(r.data.data));
+            }else {
+                throw r.error;
+            }
+        }).catch(e => {
+            if (isFetchBaseQueryError(e)){
+                detectValidationError.bindResponse(e?.data);
+            }else {
+                console.error(e);
+            }
         });
-    }, [instanceValue, checkedJobList]);
-    /*useEffect(() => {
-        setInstanceValue(maxInstance > 1 ? 1 : 0);
-    }, [maxInstance]);*/
-    /*useEffect(() => {
-        //체크된 항목이 존재하는지 확인
-        const jobIdSet = new Set(jobList.map( d => d.id));
-        setCheckedJobList(checkedJobList.filter(checkedId => jobIdSet.has(checkedId)));
-    }, [jobList]);*/
-    const instanceValueOnChange = useCallback((value) => {
-        var value = value.replaceAll(/[^0-9]/g, '');
+    }, [createPerformance, instanceValue, checkedJobList]);
+    const instanceValueOnChange = useCallback((instanceValue: string) => {
+        const valueString = instanceValue.replaceAll(/[^0-9]/g, '');
+        let value: number = !isNaN(Number(valueString)) ? Number(valueString) : 0;
         if (value > maxInstance) {
             value = maxInstance;
         }
         setInstanceValue(value);
-    }, [instanceValue]);
+    }, [instanceValue, maxInstance]);
     if (maxInstance == undefined || maxJob == undefined) {
         return null;
     }
@@ -56,13 +55,13 @@ const PerformanceSettingPage = ({}) => {
         <Box>
             <PerformanceSettingTemplate
                 instanceArea={
-                    <ValidationMessage field={"instance"} validationGroup={validationGroup}>
+                    <ValidationMessage field={"instance"} {...detectValidationError}>
                         <LabelInputText labelText={"Instance"} inputValue={instanceValue}
                                         onChange={instanceValueOnChange}/>
                     </ValidationMessage>
                 }
                 jobCountArea={
-                    <ValidationMessage field={"jobIdList"} validationGroup={validationGroup}>
+                    <ValidationMessage field={"jobIdList"} {...detectValidationError}>
                         {`${checkedJobList.length}/${maxJob}`}
                     </ValidationMessage>
                 }
@@ -71,16 +70,19 @@ const PerformanceSettingPage = ({}) => {
                         checkedIdSet={new Set(checkedJobList)}
                         onCheckCallback={(set) => {
                             if (set.size <= maxJob) {
-                                setCheckedJobList([...set]);
+                                setCheckedJobList(Array.from(set));
                             }
                         }}
                         readonly={true}
                     />
                 }
                 controlArea={
-                    <Button form={"primary"}
-                            onClick={onClickRegistryBtn}
-                    >시작</Button>
+                    <Button
+                        form={"primary"}
+                        onClick={onClickRegistryBtn}
+                    >
+                        시작
+                    </Button>
                 }
             />
         </Box>

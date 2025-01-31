@@ -6,11 +6,18 @@ import RequestCountLineChart from "../../organisms/RequestCountLineChart";
 import RpmLineChart from "../../organisms/RpmLineChart";
 import JobCardList from "../../organisms/JobCardList";
 import StopIcon from '@mui/icons-material/Stop';
-import {usePerformanceRunning} from "../../../hooks/usePerformanceRunning.ts";
+import {usePerformanceRunning} from "hooks/usePerformanceRunning";
 
 const Box = styled.div`
 `;
-const PerformanceRunningPage = ({uuid}) => {
+type PerformanceRunningPageProps = {
+    uuid: string
+}
+const PerformanceRunningPage = (
+    {
+        uuid
+    }: PerformanceRunningPageProps
+) => {
     const {data: performanceState, init, changeUuid, forceStop} = usePerformanceRunning();
     const {jobList, data, countData, rpmData, rpmSum, run} = performanceState;
 

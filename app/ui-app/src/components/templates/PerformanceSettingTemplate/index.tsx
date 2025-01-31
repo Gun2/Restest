@@ -28,12 +28,20 @@ const JobListBox = styled.div`
     max-height:600px;
     overflow-y:auto;
 `
-const PerformanceSettingTemplate = ({
-                                        instanceArea,
-                                        jobCountArea,
-                                        jobListArea,
-                                        controlArea
-                                    }) => {
+type PerformanceSettingTemplateProps = {
+    instanceArea: React.ReactNode;
+    jobCountArea: React.ReactNode;
+    jobListArea: React.ReactNode;
+    controlArea: React.ReactNode;
+}
+const PerformanceSettingTemplate = (
+    {
+        instanceArea,
+        jobCountArea,
+        jobListArea,
+        controlArea
+    }: PerformanceSettingTemplateProps
+) => {
     return (
         <Box>
             <SettingContain>
