@@ -15,7 +15,7 @@ import java.util.List;
 @ToString
 public class PerformanceCreateRequest {
     @NonNull
-    @Min(0)
+    @Min(value = 1, message = "최소 1이상의 값을 입력해 주세요")
     private Integer instance;
     @NonNull
     @Size(min = 1, message = "최소 1개 이상 선택해주세요.")
