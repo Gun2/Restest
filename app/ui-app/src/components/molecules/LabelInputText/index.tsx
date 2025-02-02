@@ -7,7 +7,18 @@ const Box = styled.div`
     ${({theme}) => theme.flex.startCenter};
     gap:10px;
 `
-const LabelInputText = ({labelText, inputValue, onChange}) => {
+type LabelInputTextProps = {
+    labelText: string;
+    inputValue: any;
+    onChange: (value: any) => void;
+}
+const LabelInputText = (
+    {
+        labelText,
+        inputValue,
+        onChange
+    }: LabelInputTextProps
+) => {
     return (
         <Box>
             <Label size={20} text={labelText}/>

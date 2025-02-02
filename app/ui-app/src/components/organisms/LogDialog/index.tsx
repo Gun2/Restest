@@ -3,9 +3,10 @@ import DraggableDialog from "../DraggableDialog";
 import OpenRow from "../../molecules/OpenRow";
 import StatusBox from "../../atoms/StatusBox";
 import Title from "../../atoms/Title";
-import {strSliceAt, toSystemDateFormat} from "../../../utils/StringFormatter.js";
-import styled from "styled-components";
+import {strSliceAt, toSystemDateFormat} from "utils/stringFormatter";
+import styled, {useTheme} from "styled-components";
 import KeyValueText from "../../atoms/KeyValueText";
+import {HttpResponse} from "types/httpResponse.types";
 
 const RowBox = styled.div`
     margin-bottom: 10px;
@@ -13,7 +14,27 @@ const RowBox = styled.div`
 const TimeBox = styled.div`
     ${({theme}) => theme.flex.endCenter};
 `;
-const LogDialog = ({id, data, title, startPoint, onClick}) => {
+type LogDialogProps = {
+    //log 고유값
+    id: string;
+    //Log data
+    data: HttpResponse[];
+    //다이얼로그 제목
+    title: string;
+    //다이얼로그 위치
+    startPoint: {x: number, y: number};
+    onClick: (id: string) => void;
+}
+const LogDialog = (
+    {
+        id,
+        data,
+        title,
+        startPoint,
+        onClick
+    }: LogDialogProps
+) => {
+    const theme = useTheme();
     return (
         <div onClick={() => {onClick(id)}}>
             <DraggableDialog title={title} id={id} startPoint={startPoint}>
@@ -24,14 +45,14 @@ const LogDialog = ({id, data, title, startPoint, onClick}) => {
                                 head={
                                     <>
                                         <StatusBox status={d.status}/>
-                                        <Title text={d.method} color={({theme}) => theme.palette.text.primary}/>
+                                        <Title text={d.method} color={theme.palette.text.primary}/>
                                         <Title text={strSliceAt(d.url, 50)}
-                                               color={({theme}) => theme.palette.text.default}/>
+                                               color={theme.palette.text.default}/>
                                     </>
                                 }
                                 tail={
                                     <>
-                                        <Title text={`${d.time}ms`} color={({theme}) => theme.palette.text.default}
+                                        <Title text={`${d.time}ms`} color={theme.palette.text.default}
                                                fontSize={16}/>
                                     </>
                                 }
@@ -66,7 +87,7 @@ const LogDialog = ({id, data, title, startPoint, onClick}) => {
                             />
                             <TimeBox>
                                 <Title fontSize={10} text={toSystemDateFormat(d.recordTime)}
-                                       color={({theme}) => theme.palette.text.default}/>
+                                       color={theme.palette.text.default}/>
                             </TimeBox>
                         </RowBox>
                     ))

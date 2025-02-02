@@ -39,7 +39,7 @@ const objectIsEmpty = (obj : Record<any, any>) => {
 type KeyValueTextProps = {
     title: string;
     titleFontSize?: number;
-    keyValue: Record<string, string | number>;
+    keyValue?: Record<string, string | number>;
     value?: React.ReactNode
 }
 /**

@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
-import styled, {css} from "styled-components";
+import React from 'react';
+import styled, {css, useTheme} from "styled-components";
 import Title from "../../atoms/Title";
 import Button from "../../atoms/Button";
+import {AlertModal as AlertModalType} from "modules/alertModal";
 
 const BackgroundCover = styled.div`
     ${({theme}) => css`${theme.backgroundCover}`};
@@ -36,8 +37,19 @@ const Content = styled.div`
     color:${({theme}) => theme.palette.text.default};
     font-size: 18px;
 `;
-
-const AlertModal = ({show=false, text, onClickConfirm, id}) => {
+type AlertModalProps = {
+    text: string;
+    id: AlertModalType["key"];
+    onClickConfirm: (id : AlertModalType["key"]) => void;
+}
+const AlertModal = (
+    {
+        text,
+        onClickConfirm,
+        id
+    }: AlertModalProps
+) => {
+    const theme = useTheme();
     return (
         <>
             show &&
@@ -46,7 +58,7 @@ const AlertModal = ({show=false, text, onClickConfirm, id}) => {
                     <Head>
                         <Title
                             text={"알림"}
-                            color={({theme}) => theme.palette.text.default}
+                            color={theme.palette.text.default}
                             fontSize={25}
                         />
                     </Head>

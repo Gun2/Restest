@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import styled, {css} from "styled-components";
+import styled, {css, DefaultTheme, useTheme} from "styled-components";
 
 const Box = styled.div`
     width:40px;
@@ -9,25 +9,25 @@ const Box = styled.div`
     cursor:pointer;
 `;
 
-const Thumb = styled.div`
+const Thumb = styled.div<{switchOn: boolean; $color: string;}>`
     
     border-radius:50%;
     width:20px;
     height:20px;
     position:absolute;
     transition-duration:0.1s;
-    ${({switchOn, color}) => switchOn ? css`
+    ${({switchOn, $color}) => switchOn ? css`
         transform: translate(20px, 0px);
-        background-color:${({color}) => color};
+        background-color:${$color};
     ` : css`
         background-color:#fff;
     `}
 `;
 
-const Track = styled.div`
-    ${({color, thumbColor}) => css`
-    background-color:${color};
-    background: linear-gradient(to left, ${color} 50%, ${thumbColor} 50%) right;
+const Track = styled.div<{switchOn: boolean; $color: string; thumbColor: string;}>`
+    ${({$color, thumbColor}) => css`
+    background-color:${$color};
+    background: linear-gradient(to left, ${$color} 50%, ${thumbColor} 50%) right;
     `}
     background-size:200%;
     transition-duration:0.1s;
@@ -36,13 +36,21 @@ const Track = styled.div`
     height:60%;
     border-radius:20px;
 `;
-const Switch = ({
-                    checked = false,
-                    thumbColor = "#9037aa",
-                    trackColor = "#252525",
-                    onChange = () => {
-                    },
-                }) => {
+type SwitchProps = {
+    checked?: boolean;
+    thumbColor?: string;
+    trackColor?: string;
+    onChange?: (arg: {checked : boolean}) => void;
+}
+const Switch = (
+    {
+        checked = false,
+        thumbColor = "#9037aa",
+        trackColor = "#252525",
+        onChange = () => {},
+    }: SwitchProps
+) => {
+    const theme = useTheme();
     const [switchOn, setSwitchOn] = useState(false);
     useEffect(() => {
         setSwitchOn(checked)
@@ -56,8 +64,8 @@ const Switch = ({
     }, [switchOn, checked]);
     return (
         <Box onClick={onClick}>
-            <Thumb color={thumbColor} switchOn={switchOn}></Thumb>
-            <Track color={trackColor} thumbColor={({theme}) => theme.colorAdd(thumbColor, -30)} switchOn={switchOn}></Track>
+            <Thumb $color={thumbColor} switchOn={switchOn}></Thumb>
+            <Track $color={trackColor} thumbColor={theme.colorAdd(thumbColor, -30)} switchOn={switchOn}></Track>
         </Box>
     );
 };

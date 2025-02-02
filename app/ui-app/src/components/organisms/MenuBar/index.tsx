@@ -9,9 +9,9 @@ const Box = styled.div`
 `;
 
 
-function MenuBar(props) {
+function MenuBar() {
     const [menuTextHide, setMenuTextHide] = useState(true);
-    const onToggle = useCallback((id) => {
+    const onToggle = useCallback((id: number) => {
         setMenuTextHide(
             (id === 1 ? true : false)
         );

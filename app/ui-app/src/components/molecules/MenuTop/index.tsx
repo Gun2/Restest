@@ -6,7 +6,14 @@ const Box = styled.div`
     ${({theme}) => theme.flex.endCenter};
     background-color : ${({theme}) => theme.palette.panel};
 `;
-function MenuTop({onToggle}) {
+type MenuTopProps = {
+    onToggle: (id: number) => void;
+}
+function MenuTop(
+    {
+        onToggle
+    }: MenuTopProps
+) {
     return (
         <Box>
             <DirectionToggle degree={0} onToggle={onToggle}/>

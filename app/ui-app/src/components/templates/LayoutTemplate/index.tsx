@@ -12,7 +12,17 @@ const Content = styled.div`
     max-height:100%;
     overflow:auto;
 `;
-function LayoutTemplate({menu, content}) {
+type LayoutTemplateProps = {
+    menu: React.ReactNode;
+    content: React.ReactNode;
+
+}
+function LayoutTemplate(
+    {
+        menu,
+        content
+    }: LayoutTemplateProps
+) {
     return (
         <Box>
             <Menu>

@@ -1,7 +1,8 @@
 import React from 'react';
 import style, {css} from 'styled-components';
+import {Variant} from "../../../theme";
 
-const Button = style.button`
+const Button = style.button<{width?: number; height?: number; circle?: boolean; form?: Variant}>`
     width : 100px;
     height : 30px;
     color : #ffffff;

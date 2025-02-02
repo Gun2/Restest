@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import styled, {css} from "styled-components";
 
-const Box = styled.div`
+const Box = styled.div<{active: boolean}>`
     ${({theme}) => theme.map.tab('primary')};
     background-color : ${({theme}) => theme.palette.secondary};
     cursor:pointer;
@@ -12,7 +12,20 @@ const Box = styled.div`
     color : ${({theme}) => theme.palette.background};
     `};
 `;
-function Tab({children, onTab, item, active}) {
+type TabProps = {
+    children: React.ReactNode;
+    onTab: (item: any) => void;
+    item: any;
+    active: boolean;
+}
+function Tab(
+    {
+        children,
+        onTab,
+        item,
+        active
+    }: TabProps
+) {
     const onClick = useCallback(() => {
         onTab(item);
     }, [item]);

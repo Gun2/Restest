@@ -2,20 +2,24 @@ import React from 'react';
 import Title from "../../atoms/Title";
 import ScheduleContent from "../ScheduleContent";
 import Switch from "../../atoms/Switch"
-import axios from "axios";
 import StatusLabel from "../../atoms/StatusLabel";
 import theme from "../../../theme";
 import OpenRow from "../OpenRow";
-import {useDispatch} from "react-redux";
 import {useRunMutation} from "modules/schedule";
+import {Schedule} from "@_types/schedule.types";
+import {SchedulerState} from "@_types/scheduler.types";
 
-const initData = {
-    title: "",
-    delay: "1000",
-    jobList: [],
+type ScheduleRowProps = {
+    title: string;
+    data: Schedule;
+    schedulerStateInfo?: SchedulerState | null;
+    onSaveCallback: () => void;
+    onDeleteCallback: () => void;
+    onClickSuccessIcon?: () => void;
+    onClickFailureIcon?: () => void;
+    _key: Schedule["id"];
+
 }
-
-
 function ScheduleRow(
     {
         title,
@@ -26,8 +30,8 @@ function ScheduleRow(
         onClickSuccessIcon,
         onClickFailureIcon,
         _key,
-    }) {
-    const dispatch = useDispatch();
+    }: ScheduleRowProps
+) {
     const [runTrigger] = useRunMutation();
     return (
         <OpenRow

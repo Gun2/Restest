@@ -1,21 +1,22 @@
-import { useState, useEffect, useRef } from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 interface ScrollPosition {
     scrollX: number;
     scrollY: number;
 }
+type ScrollEvent = UIEvent & {target: {scrollHeight: number; clientHeight: number; scrollTop: number}} | null;
 
-const useScroll = ()=> {
-    const [event, setEvent] = useState<Event | null>(null);
+function useScroll<T extends HTMLElement>(): [React.RefObject<T>, ScrollEvent] {
+    const [event, setEvent] = useState<ScrollEvent>(null);
 
-    const ref = useRef<HTMLElement>(null);
+    const ref = useRef<T>(null);
 
     useEffect(() => {
         const element = ref.current;
         if (!element) return;
 
         const handleScroll = (event: Event) => {
-            setEvent(event);
+            setEvent(event as ScrollEvent);
         };
 
         // 스크롤 이벤트 리스너 추가

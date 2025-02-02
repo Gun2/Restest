@@ -6,8 +6,15 @@ import MenuItem from '../../atoms/MenuItem';
 const Box = styled.div` 
     
 `;
-
-function MenuList({textHide}) {
+type MenuListProps = {
+    //text 숨김 여부
+    textHide: boolean;
+}
+function MenuList(
+    {
+        textHide
+    }: MenuListProps
+) {
     return (
         <Box>
             <MenuItem text={"대시보드"} textHide={textHide} to={"dashboard"}>

@@ -19,8 +19,8 @@ const alertModalSlice = createSlice({
                 text: action.payload.text
             });
         },
-        remove : (state, action : PayloadAction<AlertModal>) => {
-            return state.filter(alertModal => alertModal.key !== action.payload.key);
+        remove : (state, action : PayloadAction<AlertModal["key"]>) => {
+            return state.filter(alertModal => alertModal.key !== action.payload);
         },
     }
 })

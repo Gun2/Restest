@@ -8,7 +8,14 @@ const Box = styled.pre`
     max-height:300px;
     text-align:left;
 `;
-const ReadOnlyText = ({text}) => {
+type ReadOnlyTextProps = {
+    text: React.ReactNode;
+}
+const ReadOnlyText = (
+    {
+        text
+    }: ReadOnlyTextProps
+) => {
     return (
         <Box>
             {text}

@@ -9,8 +9,14 @@ const Box = styled.div`
 const Font = styled.p`
     color : ${({theme}) => theme.palette.text.primary};
 `
-
-function LoadingBox({show = false}) {
+type LoadingBoxProps = {
+    show: boolean;
+}
+function LoadingBox(
+    {
+        show = false
+    }: LoadingBoxProps
+) {
     return (
         <>
             {show &&

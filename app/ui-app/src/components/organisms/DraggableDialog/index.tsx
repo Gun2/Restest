@@ -1,14 +1,15 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import styled from 'styled-components';
+import React, {MouseEvent, useCallback, useEffect, useState} from 'react';
+import styled, {useTheme} from 'styled-components';
 import Title from "../../atoms/Title";
 import CloseIcon from '@mui/icons-material/Close';
 import MinimizeIcon from '@mui/icons-material/Minimize';
 import FitScreenIcon from '@mui/icons-material/FitScreen';
 import {useDispatch, useSelector} from "react-redux";
-import {hide} from "../../../modules/dialog";
+import {hide} from "modules/dialog";
 import Button from "../../atoms/Button";
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import useScroll from "hooks/useScroll";
+import {RootState} from "store";
 
 const Background = styled.div`
     ${({theme}) => theme.flex.center};
@@ -20,7 +21,7 @@ const Background = styled.div`
     pointer-events:none;
 `
 
-const Dialog = styled.div`
+const Dialog = styled.div<{ dragPoint: Position; viewContent: boolean; }>`
     min-width : 800px;
     width: 90%;
     ${({viewContent}) => viewContent ? `height : 800px;` : ``}
@@ -28,8 +29,6 @@ const Dialog = styled.div`
     flex-direction: column;
     border : 0.5px solid ${({theme}) => theme.palette.secondary};
     position : relative;
-    top : ${({top}) => top}px;
-    left : ${({left}) => left}px;
     ${({dragPoint}) => `transform: translate(${dragPoint.x}px, ${dragPoint.y}px)`};
     transition: all 0.05s;
     pointer-events:all;
@@ -99,16 +98,32 @@ const Overlay = styled.div`
     
 `
 
-
-const DraggableDialog = ({children, title, id='', startPoint = {x:0,y:0}}) => {
+type DraggableDialogProps = {
+    children: React.ReactNode;
+    title: string;
+    id?: string;
+    startPoint?: Position;
+}
+type Position = {
+    x: number;
+    y: number;
+}
+const DraggableDialog = (
+    {
+        children,
+        title,
+        id= '',
+        startPoint = {x:0,y:0}
+    }: DraggableDialogProps
+) => {
 
     const dispatch = useDispatch();
     const [viewContent, setViewContent] = useState(true);
     const [dragging, setDragging] = useState(false);
-    const [dragStartPoint, setDragStartPoint] = useState({x:0,y:0});
+    const [dragStartPoint, setDragStartPoint] = useState<Position>({x:0,y:0});
     const [dragPoint, setDragPoint] = useState(startPoint);
-    const showDialog = useSelector(store => store.dialog[id]);
-
+    const showDialog = useSelector((store: RootState) => store.dialog[id]);
+    const theme = useTheme();
     const hideDialog = useCallback(() => {
         dispatch(hide(id));
     }, [id]);
@@ -116,22 +131,22 @@ const DraggableDialog = ({children, title, id='', startPoint = {x:0,y:0}}) => {
     const toggleContent = useCallback(() => {
         setViewContent(!viewContent);
     },[viewContent]);
-    const dragPointOnMouseDown = useCallback((e)=>{
+    const dragPointOnMouseDown = useCallback((e: MouseEvent<HTMLDivElement>)=>{
         setDragStartPoint({
             x: e.clientX - dragPoint.x,
             y: e.clientY - dragPoint.y,
         });
         setDragging(true);
     }, [dragStartPoint, dragPoint])
-    const dragAreaOnMouseMove = useCallback((e) => {
+    const dragAreaOnMouseMove = useCallback((e : MouseEvent<HTMLDivElement>) => {
         setDragPoint({
             x: e.clientX-dragStartPoint.x,
             y: e.clientY - dragStartPoint.y
-        }, [dragStartPoint])
-    });
-    const dragAreaOnMouseUp = useCallback((e) => {
+        })
+    }, [dragStartPoint]);
+    const dragAreaOnMouseUp = useCallback(() => {
         setDragging(false);
-    })
+    }, []);
     return (
         <>
             {showDialog &&
@@ -139,7 +154,7 @@ const DraggableDialog = ({children, title, id='', startPoint = {x:0,y:0}}) => {
                     <Dialog dragPoint={dragPoint} viewContent={viewContent}>
                         <Head>
                             <TitleContain onMouseDown={dragPointOnMouseDown}>
-                                <Title text={title} color={({theme}) => theme.palette.text.default}></Title>
+                                <Title text={title} color={theme.palette.text.default}></Title>
                             </TitleContain>
                             <ControlContain>
                                 <ControlItem onClick={(e) => {
@@ -167,9 +182,7 @@ const DraggableDialog = ({children, title, id='', startPoint = {x:0,y:0}}) => {
                     </Dialog>
                     {
                         dragging &&
-                        <DragArea onMouseMove={dragAreaOnMouseMove} onMouseUp={dragAreaOnMouseUp}>
-
-                        </DragArea>
+                        <DragArea onMouseMove={dragAreaOnMouseMove} onMouseUp={dragAreaOnMouseUp}/>
                     }
                 </Background>
             }
@@ -178,32 +191,34 @@ const DraggableDialog = ({children, title, id='', startPoint = {x:0,y:0}}) => {
 
     );
 };
-
-const ScrollBody = ({children}) => {
+type ScrollBodyProps = {
+    children : React.ReactNode;
+}
+const ScrollBody = (
+    {
+        children
+    }: ScrollBodyProps
+) => {
     const [scrollBottom, setScrollBottom] = useState(true);
-    const [scrollRef, event] = useScroll();
+    const [scrollRef, event] = useScroll<HTMLDivElement>();
     useEffect(() => {
         if (event){
             handleScroll(event);
         }
     }, [event]);
-    /*useEffect(() => {
-        ref.current.addEventListener('scroll', handleScroll);
-        return () => {
-            ref.current?.removeEventListener('scroll', handleScroll);
-        };
-    }, [children]);*/
     useEffect(() => {
         if(scrollBottom){
             scrollToBottom();
         }
     }, [scrollBottom, children]);
     const scrollToBottom = useCallback(() => {
-        scrollRef.current.scrollTo(0, scrollRef.current.scrollHeight);
-        setScrollBottom(true);
+        if (scrollRef.current){
+            scrollRef?.current.scrollTo(0, scrollRef?.current.scrollHeight);
+            setScrollBottom(true);
+        }
     }, [scrollRef]);
 
-    const handleScroll = useCallback(({target}) => {
+    const handleScroll = useCallback(({target}: {target: {scrollHeight: number; clientHeight: number; scrollTop: number}}) => {
         if(target.scrollHeight <= target.clientHeight + target.scrollTop + 5){
             setScrollBottom(true);
         }else{

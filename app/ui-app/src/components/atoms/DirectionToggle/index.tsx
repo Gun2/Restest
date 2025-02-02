@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useReducer} from 'react';
-import { MdOutlineArrowForwardIos } from 'react-icons/md';
+import React, {useReducer} from 'react';
+import {MdOutlineArrowForwardIos} from 'react-icons/md';
 import styled from 'styled-components';
 
 const Box = styled.div`
@@ -15,8 +15,10 @@ const Button = styled.div`
         color : ${({theme}) => theme.palette.text.default};
     };
 `;
-
-function reducer(state,{type}){
+type Action = {
+    type: "INCREASE" | "INIT"
+}
+function reducer(state : number, {type}: Action){
     switch (type){
         case "INCREASE":
             return state+1;
@@ -24,8 +26,16 @@ function reducer(state,{type}){
             return 1;
     }
 }
-
-function DirectionToggle({degree = 0, onToggle}) {
+type DirectionToggleProps = {
+    degree?: number;
+    onToggle: (id: number) => void;
+}
+function DirectionToggle(
+    {
+        degree = 0,
+        onToggle
+    }: DirectionToggleProps
+) {
     //console.log(Box);
     const [count, increaseDispatch] = useReducer(reducer, 0)
     const onClick = () => {

@@ -9,7 +9,7 @@ import {SuccessResponse} from "types/api.types";
 /**
  * 측정 시간값과 해당 시간의 job들의 값
  */
-type PerformanceDataOfJobs = {measureTime: number} & Record<Job["id"], number>;
+export type PerformanceDataOfJobs = {measureTime: number} & Record<Job["id"], number>;
 
 export type PerformanceState = Omit<Performance, "uuid"> & {
     uuid: null | string,

@@ -2,7 +2,7 @@ import React, {useCallback, useReducer} from 'react';
 import styled from "styled-components";
 import InputText from "components/atoms/InputText";
 import Select from "components/atoms/Select";
-import Button from "components/atoms/Button";
+import Button from "../../atoms/Button";
 import IncreaseTable from "components/atoms/IncreaseTable";
 import TabBar from "../TabBar";
 import ValidationMessage from "components/atoms/ValidationMessage";

@@ -1,8 +1,7 @@
-import React, {useCallback, useReducer, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import Button from "../../atoms/Button";
 import styled from "styled-components";
 import JobContent from "../../molecules/JobContent";
-import axios from "axios";
 
 const Box = styled.div`
     display: flex;
@@ -19,8 +18,14 @@ const CreateBox = styled.div`
     background-color : ${({theme}) => theme.palette.panel};
 `
 
-
-function JobTop({onSaveCallback}) {
+type JobTopProps = {
+    onSaveCallback : () => void;
+}
+function JobTop(
+    {
+        onSaveCallback
+    }: JobTopProps
+) {
 
     const [viewCreator, setViewCreator] = useState(false);
     const onAdd = useCallback(() => {

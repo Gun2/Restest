@@ -1,12 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {useTheme} from 'styled-components';
 import {NavLink} from 'react-router-dom';
 
 MenuItem.propTypes = {
     
 };
 
-const Box = styled.div`
+const Box = styled.div<{textHide: boolean}>`
     .active &{
         background-color : ${({theme}) => theme.palette.background} !important;
         color : ${({theme}) => theme.palette.text.default};
@@ -25,15 +25,29 @@ const Box = styled.div`
     }
     cursor : pointer;
 `
-const navLinkStyle = ({isActive, theme}) => ({
+const navLinkStyle = ({isActive} : {isActive: boolean}): React.CSSProperties => ({
     textDecoration: 'none',
     backgroundColor: isActive ? '#fff' : undefined,
 })
 
+type MenuItemProps = {
+    children: React.ReactNode;
+    text: string;
+    textHide: boolean;
+    to: string;
 
-function MenuItem({children, text, textHide, to, theme}) {
+}
+function MenuItem(
+    {
+        children,
+        text,
+        textHide,
+        to,
+    }: MenuItemProps
+) {
+    const theme = useTheme();
     return (
-        <NavLink style={navLinkStyle} theme={theme} to={to}>
+        <NavLink style={navLinkStyle} to={to}>
             <Box textHide={textHide}>
                 <div>
                 {children}

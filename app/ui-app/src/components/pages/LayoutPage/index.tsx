@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React from 'react';
 import LayoutTemplate from '../../templates/LayoutTemplate';
 import MenuBar from '../../organisms/MenuBar';
 import DashBoardPage from '../DashBoardPage';
@@ -7,31 +7,32 @@ import {Route, Routes} from 'react-router-dom';
 import Test from '../../../Test';
 import JobPage from "../JobPage";
 import SchedulePage from "../SchedulePage";
-import LoadingBox from "../../molecules/LoadingBox";
 import {useDispatch, useSelector} from "react-redux";
-import LogDialog from "../../organisms/LogDialog";
 import PerformancePage from "../PerformancePage";
 import AlertModal from "../../organisms/AlertModal";
-import {remove} from "../../../modules/alertModal.ts";
-import {DIALOG_ID} from "../../../modules/dialog.ts";
+import {remove} from "../../../modules/alertModal";
 import GlobalLoading from "../../organisms/GlobalLoading";
 import GlobalDraggableDialog from "../../organisms/GlobalDraggableDialog";
+import {RootState} from "store";
 
 const Box = styled.div`
 `;
 
-function LayoutPage(props) {
+function LayoutPage() {
     const dispatch = useDispatch();
 
-    const alertModal = useSelector(store => store.alertModal);
+    const alertModal = useSelector((store: RootState) => store.alertModal);
     return (
         <Box>
             {
-                alertModal.map(modal => <AlertModal
-                    key={modal.key}
-                    id={modal.key}
-                    text={modal.text}
-                    onClickConfirm={(id) => dispatch(remove(id))}/>)
+                alertModal.map(modal => (
+                    <AlertModal
+                        key={modal.key}
+                        id={modal.key}
+                        text={modal.text}
+                        onClickConfirm={(id) => dispatch(remove(id))}
+                    />
+                ))
             }
             <GlobalLoading/>
             <GlobalDraggableDialog/>

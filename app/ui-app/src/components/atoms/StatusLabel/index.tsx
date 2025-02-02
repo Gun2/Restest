@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {MouseEventHandler} from 'react';
 import styled from "styled-components";
 import {MdCheckCircleOutline, MdErrorOutline} from "react-icons/md";
 
@@ -11,7 +11,18 @@ const Box = styled.div`
 const Label = styled.div`
     color: ${({theme}) => theme.palette.text.primary}
 `
-function StatusLabel({status = "success", label, onClick}) {
+type StatusLabelProps = {
+    status: "success" | "failure";
+    label: React.ReactNode;
+    onClick: MouseEventHandler<HTMLDivElement>
+}
+function StatusLabel(
+    {
+        status = "success",
+        label,
+        onClick
+    }: StatusLabelProps
+) {
     return (
         <Box onClick={onClick}>
             {

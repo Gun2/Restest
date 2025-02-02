@@ -1,11 +1,11 @@
 import React, {useCallback, useState} from 'react';
 import styled from "styled-components";
 import PerformanceSettingTemplate from "../../templates/PerformanceSettingTemplate";
-import LabelInputText from "components/molecules/LabelInputText";
+import LabelInputText from "../../molecules/LabelInputText";
 import JobList from "../../organisms/JobList";
 import {useDispatch} from "react-redux";
 import {useReadMaxInstanceQuery, useReadMaxJobQuery} from "modules/performanceSetting";
-import Button from "components/atoms/Button";
+import Button from "../../atoms/Button";
 import ValidationMessage from "../../atoms/ValidationMessage";
 import {create, useCreateMutation} from "modules/performance";
 import {useDetectValidationError} from "hooks/useDetectValidationError";

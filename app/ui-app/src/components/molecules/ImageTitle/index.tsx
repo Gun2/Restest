@@ -7,15 +7,23 @@ const Box = styled.div`
     height : 100%;
 `
 
-
-function ImageTitle({image, text}) {
+type ImageTitleProps = {
+    image: React.ReactNode;
+    text: string;
+}
+function ImageTitle(
+    {
+        image,
+        text
+    }: ImageTitleProps
+) {
     return (
         <Box>
             <div>
                 {image}
             </div>
             <div>
-                <Title text={text} fontSize={"40px"}/>
+                <Title text={text} fontSize={40}/>
             </div>
         </Box>
     );
