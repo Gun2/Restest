@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from "styled-components";
+import styled, {useTheme} from "styled-components";
 import Title from "../../atoms/Title";
 import JobContent from "../JobContent";
 import CheckBox from "../../atoms/CheckBox";
@@ -21,9 +21,6 @@ type JobRowProps = {
     onDeleteCallback: () => void;
     //체크 시 callback 함수
     onCheckCallback: (event: React.ChangeEvent<HTMLInputElement>, id: Job["id"]) => void;
-    //데이터 id
-    //TODO: _key대신 prop으로 받는 Data의 job id 값을 사용하는 방식으로 변경
-    _key: Job["id"];
     //체크된 job의 id가 추가되어있는 set
     checkSet: Set<number>;
     //체크박스 숨김
@@ -41,13 +38,13 @@ function JobRow(
         onSaveCallback,
         onDeleteCallback,
         onCheckCallback,
-        _key,
         checkSet,
         hideCheckBox,
         readonly,
         labelColor = "#f00",
     } : JobRowProps
 ) {
+    const theme = useTheme();
     return (
         <OpenRow
             head={
@@ -56,16 +53,16 @@ function JobRow(
                         !hideCheckBox &&
                         <CheckBox
                             onChange={(e) => {
-                                onCheckCallback(e, _key);
+                                onCheckCallback(e, data.id);
                             }}
-                            checked={checkSet.has(_key)}
+                            checked={checkSet.has(data.id)}
 
                         />
                     }
                     <RectDiv>
                         <Rect color={data.color} width={7} height={25}/>
                     </RectDiv>
-                    <Title color={"#e4e4e4"}>
+                    <Title color={theme.palette.text.default}>
                         {title}
                     </Title>
                 </>

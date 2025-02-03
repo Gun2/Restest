@@ -51,7 +51,6 @@ function JobList(
                                     refetch();
                                 }}
                                 key={d.id}
-                                _key={d.id}
                                 onCheckCallback={(e, key) => {
                                     const checked = e.target.checked;
                                     var nextSet = new Set(checkedIdSet);
