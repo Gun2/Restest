@@ -20,17 +20,5 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": "src",
-    "paths": {
-      //유틸리티
-      "@_utils/*" : ["utils/*"],
-      //타입
-      "@_types/*" : ["types/*"],
-      //api
-      "@_apis/*" : ["apis/*"],
-      //redux 모듈
-      "@_modules/*" : ["modules/*"],
-      //hooks
-      "@_hooks/*" : ["hooks/*"]
-    }
   },
 }
