@@ -35,20 +35,26 @@ const TdCheckBox = styled.input<{$readonly?: boolean}>`
     ${({theme, $readonly}) => $readonly && theme.style.readonly}
 `
 
-function trIncreaseCheck(data : Array<any>, cols: Array<Column>) {
+function needIncreasingRow(data : Array<any>, cols: Array<Column>) {
     if (data.length === 0) return true;
     var lastData = data[data.length - 1];
     var trIncrease = cols.some(({key, increaseIgnore}) => !increaseIgnore && lastData[key]);
     return trIncrease;
 }
 
+//비어있는 row 제거
+function filterEmptyRow<T extends Record<Column["key"], any>>(cols: Column[], data: T[]) {
+    const keys = cols.map(({key}) => key);
+    return  data.filter(data => keys.some(key => data[key]));
+}
+
 /**
- * 공백 tr을 추가하여 반환
+ * 공백 row 추가
  * @param data tr data
  * @param cols col 정보
  * @return {*[]}
  */
-function addNextEmptyTr<T>(data: Array<T>, cols: Array<Column>): Array<T> {
+function addEmptyRow<T>(data: Array<T>, cols: Array<Column>): Array<T> {
     return [
         ...data,
         cols.reduce((pre, col) => {
@@ -83,7 +89,24 @@ type IncreaseTable<T> = {
     //읽기 모드
     readonly?: boolean;
 }
-function IncreaseTable<T extends Object>(
+
+/**
+ * 비어있는 row를 제거하고, 필요 시 row를 추가함
+ * @param cols
+ * @param rows
+ */
+function filterEmptyRowAndIncreaseRowIfNeed<T>(cols: Column[], rows: (T & { [p: string]: string })[]) {
+    let filteredData = filterEmptyRow(cols, rows);
+    if (needIncreasingRow(filteredData, cols)) {
+        filteredData = addEmptyRow(filteredData, cols);
+    }
+    return filteredData;
+}
+
+/**
+ * row에 값 입력 시 row가 증가하고, 값 제거 시 row가 삭제되는 테이블
+ */
+function IncreaseTable<T extends Record<Column["key"], any>>(
     {
         cols = [],
         data = [],
@@ -92,38 +115,30 @@ function IncreaseTable<T extends Object>(
     }: IncreaseTable<T>) {
 
     useEffect(() => {
-        if (trIncreaseCheck(data, cols)) {
-            onChange(addNextEmptyTr(data, cols));
+        if (needIncreasingRow(data, cols)) {
+            onChange(addEmptyRow(data, cols));
         }
     }, [cols, data, onChange]);
 
-    //TODO: 코드 리펙토링 필요
     const onInputChange = useCallback(({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
         const { name, value } = target;
-        const keys = cols.map(({ key }) => key);
-        let updatedData = data.map((d, i) => i === index ? { ...d, [name]: value } : d)
-            .filter(d => keys.some(key => d?.hasOwnProperty(key)));
+        const updatedData = data.map((d, i) => i === index ? { ...d, [name]: value } : d);
 
-        if (trIncreaseCheck(updatedData, cols)) {
-            updatedData = addNextEmptyTr(updatedData, cols);
-        }
-
-        onChange(updatedData);
+        const processedData = filterEmptyRowAndIncreaseRowIfNeed(cols, updatedData);
+        onChange(processedData);
     }, [cols, data, onChange]);
 
     const onCheckChange = useCallback(({ target }: React.ChangeEvent<HTMLInputElement>, index: number) => {
         var {name, checked} = target;
-        var keys = cols.map(({key}) => key);
-        var emptyRemovedData = data.map((d, i) =>
+        var updatedData = data.map((d, i) =>
             i === index ? {
                 ...d,
                 [name]: checked
             } : d
-        ).filter(d => keys.some(key => d?.hasOwnProperty(key)));
-        if (trIncreaseCheck(emptyRemovedData, cols)) {
-            emptyRemovedData = addNextEmptyTr(emptyRemovedData, cols)
-        }
-        onChange(emptyRemovedData);
+        );
+
+        const processedData = filterEmptyRowAndIncreaseRowIfNeed(cols, updatedData);
+        onChange(processedData);
     }, [cols, data, onChange]);
 
     return (
