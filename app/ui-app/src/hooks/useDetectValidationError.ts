@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {ClientFieldError, ErrorResponse, SuccessResponse} from "@_types/api.types";
+import {ClientFieldError, ErrorResponse, SuccessResponse} from "types/api.types";
 
 
 export type UseDetectValidationErrorArgs = {

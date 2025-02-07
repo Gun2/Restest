@@ -3,7 +3,7 @@ import styled, {ThemeProvider} from 'styled-components';
 import theme from './theme';
 
 // @ts-ignore
-import LayoutPage from './components/pages/LayoutPage';
+import LayoutPage from './pages/RootPage';
 import {BrowserRouter} from 'react-router-dom';
 
 import React, {useRef} from "react";

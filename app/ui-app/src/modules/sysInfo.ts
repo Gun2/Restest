@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {SuccessResponse} from "@_types/api.types";
+import {SuccessResponse} from "types/api.types";
 import {subscribeWebSocket} from "./utils/streamingUpdateUtil";
 
 type SysInfoState = {

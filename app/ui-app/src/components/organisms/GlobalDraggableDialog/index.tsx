@@ -1,7 +1,7 @@
 import React, {useMemo, useState} from 'react';
 import {useSelector} from "react-redux";
 import {DIALOG_ID} from "modules/dialog";
-import LogDialog from "../LogDialog";
+import LogDialog from "../../../pages/SchedulePage/components/LogDialog";
 import {RootState} from "store";
 
 const GlobalDraggableDialog = () => {

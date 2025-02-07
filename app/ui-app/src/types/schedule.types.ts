@@ -1,4 +1,4 @@
-import {Job} from "@_types/job.types";
+import {Job} from "types/job.types";
 
 
 export type Schedule = {

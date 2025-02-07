@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../components/atoms/Button';
-import SchedulePage from "../components/pages/SchedulePage";
+import SchedulePage from "../pages/SchedulePage";
 
 function Test(props) {
     return (

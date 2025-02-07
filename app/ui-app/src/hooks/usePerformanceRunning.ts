@@ -14,7 +14,7 @@ import {
 } from "modules/performance";
 import {Performance} from "types/performance.types";
 import {StompSubscription} from "@stomp/stompjs";
-import {PerformanceData} from "@_types/performanceData.types";
+import {PerformanceData} from "types/performanceData.types";
 
 type UsePerformanceRunningArgs = {
 }

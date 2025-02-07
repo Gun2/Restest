@@ -2,7 +2,7 @@ import React, {useCallback, useState, useReducer} from 'react';
 import styled, {css} from "styled-components";
 import DirectionToggle from "../../atoms/DirectionToggle";
 import Title from "../../atoms/Title";
-import JobContent from "../JobContent";
+import JobContent from "../../../pages/JobPage/components/JobContent";
 import CheckBox from "../../atoms/CheckBox";
 import Rect from "../../atoms/Rect";
 

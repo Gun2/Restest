@@ -1,4 +1,4 @@
-import {ErrorResponse} from "@_types/api.types";
+import {ErrorResponse} from "types/api.types";
 
 //rtk query 에러 타입
 export type CustomRtkQueryError = {

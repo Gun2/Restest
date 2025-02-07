@@ -1,4 +1,4 @@
-import {Job} from "@_types/job.types";
+import {Job} from "types/job.types";
 
 /**
  * 성능측정 생성 요청

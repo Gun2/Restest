@@ -1,6 +1,6 @@
 import React, {CSSProperties, useMemo} from 'react';
 import styled, {css} from "styled-components";
-import {ClientFieldError} from "@_types/api.types";
+import {ClientFieldError} from "types/api.types";
 
 const Box = styled.div<{$errorBorder?: boolean}>`
     ${({$errorBorder}) => {
