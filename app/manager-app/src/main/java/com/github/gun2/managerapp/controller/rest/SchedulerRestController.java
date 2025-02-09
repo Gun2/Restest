@@ -1,11 +1,11 @@
 package com.github.gun2.managerapp.controller.rest;
 
 import com.github.gun2.managerapp.constant.SuccessCode;
-import com.github.gun2.managerapp.component.scheduler.SchedulerComponent;
 import com.github.gun2.managerapp.component.scheduler.SchedulerInfo;
 import com.github.gun2.managerapp.dto.HttpResponseDto;
 import com.github.gun2.managerapp.dto.SchedulerStateDto;
 import com.github.gun2.managerapp.form.response.SuccessResponse;
+import com.github.gun2.managerapp.service.SchedulerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
@@ -22,21 +22,17 @@ import java.util.List;
 public class SchedulerRestController {
 
     private final SimpMessageSendingOperations sendingOperations;
-    private final SchedulerComponent schedulerComponent;
+    private final SchedulerService schedulerService;
 
-    public SchedulerRestController(SimpMessageSendingOperations sendingOperations, @Lazy SchedulerComponent schedulerComponent) {
+    //TODO: SchedulerService 순환참조 제거 필요
+    public SchedulerRestController(SimpMessageSendingOperations sendingOperations, @Lazy SchedulerService schedulerService) {
         this.sendingOperations = sendingOperations;
-        this.schedulerComponent = schedulerComponent;
+        this.schedulerService = schedulerService;
     }
 
     @GetMapping("/v1/schedulers")
     public ResponseEntity<SuccessResponse<List<SchedulerStateDto>>> findAll(){
-        //TODO: 서비스 레이어로 옮기기
-        List<SchedulerStateDto> schedulerStateDtoList =  schedulerComponent
-                .getSchedulerInfoMap()
-                .values()
-                .stream()
-                .map(info -> SchedulerStateDto.of(info)).toList();
+        List<SchedulerStateDto> schedulerStateDtoList =  schedulerService.findAll();
         return SuccessResponse.of(schedulerStateDtoList).toResponseEntity(SuccessCode.OK);
     }
 
@@ -68,7 +64,7 @@ public class SchedulerRestController {
     @GetMapping("/v1/scheduler/{id}/responses/failures")
     @ResponseBody
     public ResponseEntity<List<HttpResponseDto>> findFailedResponses(@PathVariable("id") Long id){
-        SchedulerInfo schedulerInfo = schedulerComponent.getSchedulerInfoMap().get(id);
+        SchedulerInfo schedulerInfo = schedulerService.findByScheduleId(id);
         return SuccessResponse.of(schedulerInfo.getFailureResponseList().toList()).toResponseEntity(SuccessCode.OK);
     }
 
@@ -80,7 +76,7 @@ public class SchedulerRestController {
     @GetMapping("/v1/scheduler/{id}/responses/successes")
     @ResponseBody
     public ResponseEntity<List<HttpResponseDto>> findSucceedResponses(@PathVariable("id") Long id){
-        SchedulerInfo schedulerInfo = schedulerComponent.getSchedulerInfoMap().get(id);
+        SchedulerInfo schedulerInfo = schedulerService.findByScheduleId(id);
         return SuccessResponse.of(schedulerInfo.getSuccessResponseList().toList()).toResponseEntity(SuccessCode.OK);
     }
 
