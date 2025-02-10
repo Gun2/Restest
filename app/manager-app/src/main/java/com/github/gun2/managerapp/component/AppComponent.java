@@ -1,7 +1,7 @@
 package com.github.gun2.managerapp.component;
 
-import com.github.gun2.managerapp.component.scheduler.SchedulerComponent;
-import com.github.gun2.managerapp.service.ScheduleService;
+import com.github.gun2.managerapp.domain.scheduler.component.SchedulerComponent;
+import com.github.gun2.managerapp.domain.schedule.service.ScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

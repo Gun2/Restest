@@ -1,15 +1,12 @@
 package com.github.gun2.managerapp.impl;
 
-import static org.assertj.core.api.Assertions.*;
-
-import com.github.gun2.managerapp.dto.ScheduleDto;
-import com.github.gun2.managerapp.entity.Job;
-import com.github.gun2.managerapp.entity.Schedule;
-import com.github.gun2.managerapp.entity.ScheduleJob;
-import com.github.gun2.managerapp.repository.JobRepository;
-import com.github.gun2.managerapp.repository.ScheduleJobRepository;
-import com.github.gun2.managerapp.repository.ScheduleRepository;
-import com.github.gun2.managerapp.service.ScheduleService;
+import com.github.gun2.managerapp.domain.schedule.dto.ScheduleDto;
+import com.github.gun2.managerapp.domain.job.entity.Job;
+import com.github.gun2.managerapp.domain.schedule.entity.Schedule;
+import com.github.gun2.managerapp.domain.schedule.entity.ScheduleJob;
+import com.github.gun2.managerapp.domain.job.repository.JobRepository;
+import com.github.gun2.managerapp.domain.schedule.repository.ScheduleJobRepository;
+import com.github.gun2.managerapp.domain.schedule.repository.ScheduleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @DataJpaTest

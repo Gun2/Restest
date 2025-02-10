@@ -1,6 +1,7 @@
 package com.github.gun2.managerapp.repository;
 
-import com.github.gun2.managerapp.entity.Schedule;
+import com.github.gun2.managerapp.domain.schedule.repository.ScheduleRepository;
+import com.github.gun2.managerapp.domain.schedule.entity.Schedule;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

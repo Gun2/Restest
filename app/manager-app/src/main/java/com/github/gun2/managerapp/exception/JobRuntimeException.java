@@ -1,7 +1,7 @@
 package com.github.gun2.managerapp.exception;
 
-import com.github.gun2.managerapp.component.scheduler.SchedulerInfo;
-import com.github.gun2.managerapp.entity.Job;
+import com.github.gun2.managerapp.domain.scheduler.component.SchedulerInfo;
+import com.github.gun2.managerapp.domain.job.entity.Job;
 import lombok.Getter;
 
 /**

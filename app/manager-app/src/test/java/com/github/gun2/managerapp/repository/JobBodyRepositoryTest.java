@@ -1,8 +1,10 @@
 package com.github.gun2.managerapp.repository;
 
 import com.github.gun2.managerapp.config.QueryDslConfig;
-import com.github.gun2.managerapp.entity.Job;
-import com.github.gun2.managerapp.entity.JobBody;
+import com.github.gun2.managerapp.domain.job.entity.Job;
+import com.github.gun2.managerapp.domain.job.entity.JobBody;
+import com.github.gun2.managerapp.domain.job.repository.JobBodyRepository;
+import com.github.gun2.managerapp.domain.job.repository.JobRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

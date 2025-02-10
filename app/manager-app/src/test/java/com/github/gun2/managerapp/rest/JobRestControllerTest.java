@@ -1,11 +1,11 @@
 package com.github.gun2.managerapp.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.gun2.managerapp.controller.rest.JobRestController;
+import com.github.gun2.managerapp.domain.job.controller.JobRestController;
 import com.github.gun2.managerapp.exception.GlobalExceptionHandler;
-import com.github.gun2.managerapp.form.request.JobRequest;
-import com.github.gun2.managerapp.service.JobService;
-import com.github.gun2.managerapp.spreader.JobChangeDataSpreader;
+import com.github.gun2.managerapp.domain.job.dto.JobRequest;
+import com.github.gun2.managerapp.domain.job.service.JobService;
+import com.github.gun2.managerapp.domain.spreader.JobChangeDataSpreader;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
