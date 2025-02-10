@@ -1,13 +1,12 @@
 package com.github.gun2.managerapp.controller.rest;
 
-import com.github.gun2.managerapp.constant.SuccessCode;
 import com.github.gun2.managerapp.component.scheduler.SchedulerInfo;
+import com.github.gun2.managerapp.constant.SuccessCode;
 import com.github.gun2.managerapp.dto.HttpResponseDto;
 import com.github.gun2.managerapp.dto.SchedulerStateDto;
 import com.github.gun2.managerapp.form.response.SuccessResponse;
 import com.github.gun2.managerapp.service.SchedulerService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -20,12 +19,11 @@ import java.util.List;
 @MessageMapping("/scheduler")
 @RequestMapping("/api")
 public class SchedulerRestController {
-
+    //TODO: 정보 전파 로직을 별도의 클래스로 이동
     private final SimpMessageSendingOperations sendingOperations;
     private final SchedulerService schedulerService;
 
-    //TODO: SchedulerService 순환참조 제거 필요
-    public SchedulerRestController(SimpMessageSendingOperations sendingOperations, @Lazy SchedulerService schedulerService) {
+    public SchedulerRestController(SimpMessageSendingOperations sendingOperations, SchedulerService schedulerService) {
         this.sendingOperations = sendingOperations;
         this.schedulerService = schedulerService;
     }

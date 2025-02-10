@@ -1,16 +1,19 @@
 package com.github.gun2.managerapp.component.scheduler;
 
-import com.github.gun2.managerapp.controller.rest.SchedulerRestController;
-import com.github.gun2.managerapp.controller.rest.SysInfoRestController;
 import com.github.gun2.managerapp.config.RestTemplateConfig;
 import com.github.gun2.managerapp.dto.HttpResponseDto;
 import com.github.gun2.managerapp.dto.JobBodyDto;
 import com.github.gun2.managerapp.dto.JobDto;
 import com.github.gun2.managerapp.dto.ScheduleDto;
+import com.github.gun2.managerapp.event.SchedulerDeleteEvent;
+import com.github.gun2.managerapp.event.SchedulerReceiveFailedResponseEvent;
+import com.github.gun2.managerapp.event.SchedulerReceiveSucceedResponseEvent;
+import com.github.gun2.managerapp.event.SchedulerRunEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,10 +35,12 @@ public class SchedulerComponent {
      * <b>현재 실행해야하는 스케줄러 정보</b>
      */
     private final ConcurrentReferenceHashMap<Long, SchedulerInfo> schedulerInfoMap = new ConcurrentReferenceHashMap<>();
-
+    private final ApplicationEventPublisher applicationEventPublisher;
+/*
     private final SysInfoRestController sysInfoRestController;
     private final SchedulerRestController schedulerRestController;
     private final SchedulerLogBlockingQueue schedulerLogBlockingQueue;
+*/
 
     @Value("${app.default.value.scheduler-delay:100}")
     private int defaultSchedulerDelay;
@@ -115,9 +120,10 @@ public class SchedulerComponent {
      */
     public void deleteSchedule(Long scheduleId) {
         if (schedulerInfoMap.containsKey(scheduleId)) {
-            schedulerInfoMap.get(scheduleId).getRunThread().interrupt();
+            SchedulerInfo schedulerInfo = schedulerInfoMap.get(scheduleId);
+            schedulerInfo.getRunThread().interrupt();
             schedulerInfoMap.remove(scheduleId);
-            schedulerRestController.deleteScheduleInfo(scheduleId);
+            applicationEventPublisher.publishEvent(new SchedulerDeleteEvent(schedulerInfo));
         }
     }
 
@@ -144,8 +150,7 @@ public class SchedulerComponent {
         log.info("RestSchedulerComponent run!!!");
         for (Long id : schedulerInfoMap.keySet()) {
             final SchedulerInfo info = schedulerInfoMap.get(id);
-            if (!info.getRunThread().isAlive() || info.getRunThread().isInterrupted()) {
-                schedulerRestController.insertScheduleInfo(info);
+            if (info != null && (!info.getRunThread().isAlive() || info.getRunThread().isInterrupted())) {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -167,6 +172,7 @@ public class SchedulerComponent {
                 });
                 thread.start();
                 info.setRunThread(thread);
+                applicationEventPublisher.publishEvent(new SchedulerRunEvent(info));
             }
         }
     }
@@ -268,11 +274,8 @@ public class SchedulerComponent {
      */
     private void recordSucceedRequest(HttpResponseDto httpResponseDto, ResponseEntity<String> response, SchedulerInfo info) {
         httpResponseDto.setResponse(response);
-        schedulerLogBlockingQueue.addSuccess(info, httpResponseDto);
-        //info.recordSucceedResponse(httpResponseDto);
         info.getSuccessCount().incrementAndGet();
-        sysInfoRestController.increaseSuccessNumber();
-        schedulerRestController.updateScheduleInfo(info);
+        applicationEventPublisher.publishEvent(new SchedulerReceiveSucceedResponseEvent(httpResponseDto, info));
     }
 
     /**
@@ -284,11 +287,8 @@ public class SchedulerComponent {
      */
     private <T extends Exception> void recordFailedRequest(HttpResponseDto httpResponseDto, T e, SchedulerInfo info) {
         httpResponseDto.setErrorResponse(e);
-        schedulerLogBlockingQueue.addFailure(info, httpResponseDto);
-        //info.recordFailureResponse(httpResponseDto);
         info.getFailureCount().incrementAndGet();
-        sysInfoRestController.increaseFailureNumber();
-        schedulerRestController.updateScheduleInfo(info);
+        applicationEventPublisher.publishEvent(new SchedulerReceiveFailedResponseEvent(httpResponseDto, info));
     }
 
     /**
