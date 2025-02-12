@@ -25,7 +25,6 @@ public class SysInfoDataSpreader {
      * 접속중인 사용자 수 전파
      */
     public void spreadAccessUserCount() {
-        //TODO: AccessUserComponent에서 카운팅 한 user 연결 수를 사용하지 않고 websocket에서 세션수를 가져온 뒤 반환하고 있으며, 적합한 방식으로 일관화 필요
         int sessionCnt = ((SubProtocolWebSocketHandler)webSocketHandler).getStats().getWebSocketSessions();
         sendingOperations.convertAndSend("/sys-info/user", sessionCnt);
     }

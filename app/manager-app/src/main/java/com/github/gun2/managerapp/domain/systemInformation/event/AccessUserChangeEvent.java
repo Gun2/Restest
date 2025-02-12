@@ -9,10 +9,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class AccessUserChangeEvent {
-    //접속중인 사용자 수
-    private final int count;
 
-    public AccessUserChangeEvent(int count) {
-        this.count = count;
-    }
+    public AccessUserChangeEvent() {}
 }
