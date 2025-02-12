@@ -98,10 +98,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     @Transactional
     public void delete(long id) {
-        scheduleJobService.deleteByScheduleId(id);
-        scheduleRepository.deleteById(id);
-        componentDelete(id);
-        applicationEventPublisher.publishEvent(new ScheduleDataChangeEvent(ScheduleDto.builder().id(id).build(), DataChangeEvent.Type.DELETE));
+        scheduleRepository.findById(id).ifPresent(schedule -> {
+            ScheduleDto origin = new ScheduleDto(schedule);
+            scheduleRepository.deleteById(id);
+            scheduleJobService.deleteByScheduleId(id);
+            componentDelete(id);
+            applicationEventPublisher.publishEvent(new ScheduleDataChangeEvent(origin, DataChangeEvent.Type.DELETE));
+        });
     }
 
     @Override

@@ -1,17 +1,17 @@
 package com.github.gun2.managerapp.domain.job.service.impl;
 
+import com.github.gun2.managerapp.domain.job.dto.JobDto;
+import com.github.gun2.managerapp.domain.job.entity.Job;
 import com.github.gun2.managerapp.domain.job.event.JobDataChangeEvent;
-import com.github.gun2.managerapp.domain.scheduler.component.SchedulerComponent;
-import com.github.gun2.managerapp.domain.job.service.JobService;
-import com.github.gun2.managerapp.event.DataChangeEvent;
-import com.github.gun2.managerapp.exception.IdentityIsNullException;
-import com.github.gun2.managerapp.exception.RowNotFoundFromIdException;
 import com.github.gun2.managerapp.domain.job.repository.JobBodyRepository;
 import com.github.gun2.managerapp.domain.job.repository.JobHeaderRepository;
 import com.github.gun2.managerapp.domain.job.repository.JobRepository;
+import com.github.gun2.managerapp.domain.job.service.JobService;
 import com.github.gun2.managerapp.domain.schedule.repository.ScheduleJobRepository;
-import com.github.gun2.managerapp.domain.job.dto.JobDto;
-import com.github.gun2.managerapp.domain.job.entity.Job;
+import com.github.gun2.managerapp.domain.scheduler.component.SchedulerComponent;
+import com.github.gun2.managerapp.event.DataChangeEvent;
+import com.github.gun2.managerapp.exception.IdentityIsNullException;
+import com.github.gun2.managerapp.exception.RowNotFoundFromIdException;
 import com.github.gun2.managerapp.util.ColorUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,14 +95,19 @@ public class JobServiceImpl implements JobService {
     @Override
     @Transactional
     public void delete(long id) {
-        scheduleJobRepository.deleteAllByJobId(id);
-        jobHeaderRepository.deleteAllByJobId(id);
-        jobBodyRepository.deleteAllByJobId(id);
-        jobRepository.deleteById(id);
-        deleteComponent(id);
-        applicationEventPublisher.publishEvent(
-                new JobDataChangeEvent(JobDto.builder().id(id).build(), DataChangeEvent.Type.DELETE)
-        );
+        jobRepository.findById(id).ifPresent(job -> {
+            JobDto origin = new JobDto(job);
+
+            jobRepository.deleteById(id);
+            jobHeaderRepository.deleteAllByJobId(id);
+            jobBodyRepository.deleteAllByJobId(id);
+            scheduleJobRepository.deleteAllByJobId(id);
+            deleteComponent(id);
+
+            applicationEventPublisher.publishEvent(
+                    new JobDataChangeEvent(origin, DataChangeEvent.Type.DELETE)
+            );
+        });
 
     }
 
